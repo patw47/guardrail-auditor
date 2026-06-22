@@ -1064,6 +1064,45 @@ Architect prompts logged **verbatim**, every turn (SCRIBE duty).
 
 ---
 
+## Prompt #33 — T0 (2026-06-22) — Gate S8 approved + two refinements; build (closes plan)
+
+> [GATE S8 OK - approach approved, two refinements]
+> README outline approved. Remediation computed on serialization (like the
+> control label, no schema change) approved. Demo seed offline approved. The test
+> that asserts the README names the REAL commands/fixtures/endpoints is a good
+> guard against a lying README - keep it. Two refinements before code:
+>
+> 1. Remediation must be consistent with the CITED control, not just plausible.
+>    Each finding cites a control_id (e.g. CIS §5.2); its remediation snippet must
+>    be the fix that actually closes THAT rule, and should reference the same
+>    control_id/page as the finding - so the fix and the cited rule are aligned,
+>    not a generic suggestion. Add a test that the remediation exists for every
+>    rule that has a mapping, keyed by the same rule_id.
+>
+> 2. demo_seed.py writes guardrail.db: confirm *.db is still gitignored (from S0)
+>    so a populated DB never gets committed, and make the seed IDEMPOTENT (re-running
+>    doesn't pile up duplicate scans - clear/replace or check-before-insert).
+>
+> Everything else approved. Build remediation + README + OpenAPI examples + demo
+> seed, run L1, run the documented clone->scan locally for evidence, and STOP at
+> the S8 evidence gate. This closes the full plan (S0-S8). At that gate I want: the
+> 4 remediations dumped (rule -> snippet), the README-commands-are-real test
+> passing, and the OpenAPI example visible.
+
+---
+
+## Prompt #34 — T0 (2026-06-22) — Gate S8 APPROVED; commit (PLAN COMPLETE)
+
+> [GATE S8 OK] Plan complete. Conclusive: 4 remediations each closing their cited
+> control (keyed by rule_id == CONTROL_MAP, computed on FindingOut, fenced), the
+> README-is-real test passing (real commands/endpoints/files asserted), OpenAPI
+> example present, demo seed offline + idempotent with *.db gitignored, VERIFIER
+> PASS, pipeline diff empty, no new dep, no tampering, 85 tests green. Both
+> refinements landed (remediation control-consistent; seed idempotent + db
+> ignored). Approved - commit S8 with your subject and push. S0-S8 is done.
+
+---
+
 ## Timer
 - **T0 start**: turn 1 (2026-06-22)
 - **Goal**: MVP in 4–6h active build time

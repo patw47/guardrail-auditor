@@ -174,6 +174,22 @@ _(SCRIBE; re-read at sprint start. Write only what a later sprint needs.)_
   Dashboard adds a repo-URL input + Rescan (shown only when source_type=repo_url),
   still `/api`-only. **No new runtime dep** (git is a system tool).
 - Roadmap: more allowlist hosts (Bitbucket), per-file parse-tolerance nuances.
+
+## S8
+- **Remediation** (`core/remediation.py`, `models/remediation.py`): pure data,
+  keyed by the SAME `rule_id` as `CONTROL_MAP`; each summary cites the same
+  control the finding maps to (§5.2 / §2.1.4 / §2.2.1 / A.8.20). Exposed via a
+  **computed** `FindingOut.remediation` (derived from rule_id, like the control
+  label) — **no schema change**. `remediate()` is fenced (unknown rule → None).
+- **README** is guarded by `tests/test_readme.py` — it must name real commands/
+  endpoints and reference files that exist (no lying README).
+- **`tools/demo_seed.py`**: offline (bundled fixtures), **idempotent** via a
+  `source_ref="__demo__"` tag (re-run replaces, never piles up). `*.db` gitignored.
+- **`tools/` is a package** (`__init__.py`) so mypy doesn't see `demo_seed` under
+  two module names once it's imported in a test.
+- **PLAN COMPLETE: S0–S8.** Scaffold → parsers → detectors (L3) → Risk Score →
+  compliance mapping → API + persistence → dashboard → assurance (matrix +
+  oracle) → repo-URL/SSRF + Rescan → remediation + README.
 - **Public-via-policy detection** keys on a statement with `Effect: Allow` + a
   wildcard `Principal` AND **no scoping `Condition`** — a `Condition`
   (e.g. `aws:SourceIp`/`aws:SourceVpce`) means NOT public. This is the exact

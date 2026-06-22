@@ -72,3 +72,10 @@ _(SCRIBE; re-read at sprint start. Write only what a later sprint needs.)_
   bad URL; (2) **injectable cloner** keeps the network feature fully testable
   offline in CI, with a single real clone for human evidence. Temp-dir cleanup in
   `try/finally` (verified by a raising-clone test) prevents clone leaks.
+
+## S8
+- **mypy "Source file found twice"** — once a `tools/` script is imported in a
+  test (`from tools.demo_seed import …`), mypy sees it as both `demo_seed` and
+  `tools.demo_seed`. Fix: add `tools/__init__.py` so it's only ever the package
+  module. (ruff/pytest were happy; mypy caught it — the type-check leg earns its
+  place in L1.)

@@ -45,3 +45,6 @@ td a { display: inline-block; margin-right: .35rem; color: #1565c0; }
 
 .empty { padding: 1rem; background: #e8f5e9; border-radius: 8px; color: #1b5e20;
   font-weight: 600; }
+.remediation { margin: .4rem 0 0; padding: .5rem; background: #f0f7f0;
+  border-left: 3px solid #1b9e3e; border-radius: 4px; font-size: .8rem;
+  white-space: pre-wrap; overflow-x: auto; }

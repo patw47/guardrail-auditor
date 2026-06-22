@@ -97,7 +97,16 @@ function renderFindings(findings) {
     tr.appendChild(cell(f.title));
     tr.appendChild(cell(`${f.resource_type} '${f.resource_name}'`));
     tr.appendChild(cell(`${f.file}:${f.line}`));
-    tr.appendChild(cell(f.explanation));
+
+    const expCell = document.createElement("td");
+    expCell.appendChild(document.createTextNode(f.explanation));
+    if (f.remediation) {
+      const fix = document.createElement("pre");
+      fix.className = "remediation";
+      fix.textContent = "Fix — " + f.remediation.summary + "\n" + f.remediation.snippet;
+      expCell.appendChild(fix);
+    }
+    tr.appendChild(expCell);
 
     const ctrlCell = document.createElement("td");
     for (const c of f.controls) {

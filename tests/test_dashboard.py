@@ -46,6 +46,7 @@ def test_app_js_wires_api_and_fields() -> None:
         "/api/scans", "/api/scans/repo", "/rescan", "source_type",
         "FormData", "res.ok", "severity.toUpperCase()",
         "c.label", "reference_url", "findings.length", "showError",
+        "f.remediation",
     ]:
         assert token in js, f"app.js missing wiring: {token}"
 

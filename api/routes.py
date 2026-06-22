@@ -8,7 +8,15 @@ from typing import cast
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from sqlalchemy.orm import Session
 
-from api.schemas import ControlOut, FindingOut, RepoScanRequest, ScanDetail, ScanSummary, ScoreOut
+from api.schemas import (
+    ControlOut,
+    FindingOut,
+    RemediationOut,
+    RepoScanRequest,
+    ScanDetail,
+    ScanSummary,
+    ScoreOut,
+)
 from core.config_source import (
     ConfigSourceError,
     RepoUrlSource,
@@ -18,6 +26,7 @@ from core.config_source import (
 from core.db import SessionLocal
 from core.parsing import ParseError
 from core.pipeline import run_scan
+from core.remediation import remediate
 from core.repository import get_scan, list_scans, save_scan
 from core.tables import ControlRow, FindingRow, ScanRow
 from models import Control
@@ -58,6 +67,7 @@ def _control_out(c: ControlRow) -> ControlOut:
 
 
 def _finding_out(fr: FindingRow) -> FindingOut:
+    rem = remediate(fr.rule_id)  # derived from rule_id (no schema change)
     return FindingOut(
         rule_id=fr.rule_id,
         title=fr.title,
@@ -70,6 +80,9 @@ def _finding_out(fr: FindingRow) -> FindingOut:
         explanation=fr.explanation,
         weight=fr.weight,
         controls=[_control_out(c) for c in sorted(fr.controls, key=lambda c: c.id)],
+        remediation=(
+            RemediationOut(summary=rem.summary, snippet=rem.snippet, cli=rem.cli) if rem else None
+        ),
     )
 
 

@@ -16,6 +16,12 @@ class ControlOut(BaseModel):
     label: str  # computed display cite (single source of truth, incl. section marker)
 
 
+class RemediationOut(BaseModel):
+    summary: str
+    snippet: str
+    cli: str | None = None
+
+
 class FindingOut(BaseModel):
     rule_id: str
     title: str
@@ -28,6 +34,7 @@ class FindingOut(BaseModel):
     explanation: str
     weight: int
     controls: list[ControlOut]
+    remediation: RemediationOut | None = None
 
 
 class ScoreOut(BaseModel):
@@ -50,3 +57,8 @@ class ScanDetail(ScanSummary):
 
 class RepoScanRequest(BaseModel):
     repo_url: str
+    model_config = {
+        "json_schema_extra": {
+            "examples": [{"repo_url": "https://github.com/bridgecrewio/terragoat"}]
+        }
+    }

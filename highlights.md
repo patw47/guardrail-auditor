@@ -113,3 +113,17 @@ CATCH · DISCRIMINATION · GATE · DECISION · GENERALITY · MAPPING · METRIC
   never-apply, and the temp dir is cleaned up in `try/finally` even on error.
   Security feature isolated from the schema, CI stays offline via an injectable
   cloner.
+
+## S8 — PLAN COMPLETE
+- **MAPPING** — every finding now carries a **remediation** (corrected snippet /
+  CLI action) that closes the SAME control it cites — keyed by `rule_id`, summary
+  references §5.2 / §2.1.4 / §2.2.1 / A.8.20 — computed at serialization, no
+  schema change. The auditor doesn't just flag; it tells you the fix.
+- **GATE** — **S0–S8 complete and on the remote**: scaffold → parsers → detectors
+  (L3 pairs) → Risk Score → compliance mapping → REST API + persistence →
+  dashboard → assurance (matrix + Checkov/TerraGoat oracle) → SSRF-guarded
+  repo-URL + Rescan → remediation + a guarded-real README. Every sprint cleared a
+  two-gate loop with an independent read-only VERIFIER; ~11h active build.
+- **METRIC** — a `tests/test_readme.py` guard makes the README un-lie-able (real
+  commands/endpoints/files), and the demo seed is idempotent — the polish has the
+  same evidence discipline as the core.
