@@ -22,6 +22,10 @@ python3 -m venv .venv && ./.venv/bin/pip install -e ".[dev]"
 ./.venv/bin/uvicorn main:app          # serves the API + dashboard on :8000
 ```
 
+> `guardrail.db` is created on first run and is **disposable** — `*.db` is
+> gitignored; delete it to reset. (The dev schema also self-upgrades additively
+> on boot, so a stale db never breaks the demo.)
+
 Open <http://127.0.0.1:8000/> and either:
 
 - **Upload** the bundled vulnerable fixtures `tests/fixtures/detectors/*.tf`

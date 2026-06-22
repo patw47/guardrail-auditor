@@ -79,3 +79,14 @@ _(SCRIBE; re-read at sprint start. Write only what a later sprint needs.)_
   `tools.demo_seed`. Fix: add `tools/__init__.py` so it's only ever the package
   module. (ruff/pytest were happy; mypy caught it — the type-check leg earns its
   place in L1.)
+
+## Fix — stale dev-DB schema (post-S8, found in the live demo)
+- **`create_all` creates tables, it does NOT migrate columns.** A `guardrail.db`
+  created before S5b's `source_ref` column kept the old `scans` table, so repo
+  scans 500'd ("no column named source_ref"). Root cause: `CREATE TABLE IF NOT
+  EXISTS` skips an existing table entirely. Fix: `core/db.init_db` now runs
+  `_reconcile_dev_schema` — an additive, nullable-only `ALTER TABLE ADD COLUMN`
+  for any model column missing on disk (no Alembic, no dep, no-op on a correct
+  db). Lesson: any nullable column added to an ORM after first release needs this
+  boot-time reconcile, or document the db as throwaway — we did both (README:
+  `*.db` disposable).

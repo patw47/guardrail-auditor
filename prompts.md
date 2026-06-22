@@ -1183,8 +1183,39 @@ Architect prompts logged **verbatim**, every turn (SCRIBE duty).
 
 ---
 
-## Timer
+## Prompt #39 — T0 (2026-06-22) — BUG (live demo friction): stale guardrail.db missing source_ref
+
+> [BUILDER - debug] Bug found during the live demo (log it in prompts.md as real
+> friction).
+> Symptom: scanning a repo URL raises 500 with sqlite3.OperationalError "table
+> scans has no column named source_ref" (and on reads, "no such column:
+> scans.source_ref"), when a guardrail.db created BEFORE the S5b schema change is
+> present. init_db() uses CREATE TABLE IF NOT EXISTS, so a pre-existing scans
+> table never gains the new source_ref column. An evaluator who clones, runs
+> demo_seed (or has any stale db), then scans a repo hits the same 500 on the
+> headline demo.
+> Expected: a clean clone-to-scan works without the user manually deleting the db.
+> Procedure: (1) root cause first; (2) minimal fix, no Alembic/dep — detect a dev
+> SQLite schema missing an expected column and add it / recreate; detection/
+> scoring/compliance unchanged; (3) regression test from an OLD-schema scans table
+> → repo scan persists + reads back without 500; (4) README line: guardrail.db is
+> created on first run + disposable (*.db gitignored). Run L1, VERIFIER, STOP.
+> Single-fix patch, commit on its own.
 - **T0 start**: turn 1 (2026-06-22)
 - **Goal**: MVP in 4–6h active build time
 - **Hard max**: 16h
-- **Elapsed (cumulative active)**: ~0.2h
+- **Elapsed (cumulative active)**: ~12.3h
+
+---
+
+## Prompt #40 — T0 (2026-06-22) — Gate schema-fix APPROVED; commit single fix
+
+> [GATE schema-fix OK] Conclusive: root cause correct (CREATE TABLE IF NOT EXISTS
+> skips an existing table so source_ref never lands on a pre-S5b db), the
+> additive nullable-only ALTER TABLE reconciles in place with no data loss / no
+> recreate / no Alembic / no dep, the live repro shows the column added and the
+> repo scan persisting without 500, and the VERIFIER's negative control
+> reproduces the exact pre-fix 500 so the regression test has teeth. Detection/
+> scoring/compliance/parsing diff empty, tables.py untouched, only core/db.py +
+> test + README touched, 88 tests green. Approved - commit this single fix on its
+> own with your subject and push.
