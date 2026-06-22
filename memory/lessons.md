@@ -40,3 +40,11 @@ _(SCRIBE; re-read at sprint start. Write only what a later sprint needs.)_
   isn't verifiable (CIS RDS), cite the section with a visible `(section)` marker
   rather than guess — a fabricated control id is the worst credibility hit for an
   audit tool.
+
+## S5
+- No bug this sprint. Two patterns worth keeping: (1) **DB isolation** by setting
+  `DATABASE_URL` to a temp file in `conftest.py` *before* `core.db` imports, so
+  tests never touch the dev DB; (2) the **persisted-vs-pipeline** round-trip
+  (`load_result == run_scan`) is a stronger check than persisted-vs-itself — the
+  VERIFIER's negative control (corrupt a persisted value → equality flips)
+  proved it actually catches save/load mangling.

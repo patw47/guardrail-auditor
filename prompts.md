@@ -822,6 +822,61 @@ Architect prompts logged **verbatim**, every turn (SCRIBE duty).
 
 ---
 
+## Prompt #25 — T0 (2026-06-22) — Gate S5 schema approved; build
+
+> [GATE S5 OK - schema approved (sensitive gate cleared), two notes]
+> Schema approved: 4 tables with correct cascades (Scan 1-1 Score, 1-* Finding,
+> Finding 1-* Control), ORM in core/tables.py kept separate from the pure
+> models/ dataclasses via a repository, and the control `level` (precise/section)
+> persisted so the S4 marker survives to the dashboard. Sensitive gate cleared.
+>
+> Two things:
+>
+> 1. Denormalizing `explanation` and `weight` is fine for the MVP, but it means a
+>    persisted scan can drift from the pipeline if a rule/template later changes.
+>    Bound it: the round-trip test (criterion 3) must assert that what's persisted
+>    equals what the IN-MEMORY pipeline produced for the same input - compare
+>    persisted-vs-pipeline-output, not persisted-vs-itself. That catches a
+>    save/load that silently mangles a field.
+>
+> 2. Upload transport: take multipart (python-multipart). It's your one new dep
+>    and it's justified - the demo differentiator is "upload files / paste repo
+>    URL", so a real multipart upload endpoint (testable in Swagger) beats a JSON
+>    {files:[...]} body that's a fake upload. Approved as a justified dependency.
+>
+> Scope confirmed: uploaded-files only, repo-URL deferred to S5b. Everything else
+> approved (pipeline reused unchanged, OpenAPI on every endpoint, DB-isolated
+> tests). Build it, run L1, and STOP at the S5 evidence gate. At that gate I want:
+> the real POST /api/scans response on the vulnerable fixtures (201 + score +
+> findings with controls + explanation), the persisted-vs-pipeline round-trip
+> output, a 404 case, and the /openapi.json path assertions.
+
+---
+
+## Prompt #26 — T0 (2026-06-22) — Gate S5 APPROVED; commit; re-sequence S6 before S5b
+
+> [GATE S5 OK] Conclusive: real POST -> 201 with score + findings + controls +
+> explanation, 404 on unknown id, OpenAPI complete, schema matches the approved
+> sensitive-gate design, scope grep proves no clone/network leaked (repo-URL is
+> correctly absent), pipeline diff empty, DB isolated, only python-multipart
+> added, no tampering. The round-trip is genuinely persisted-vs-pipeline and the
+> VERIFIER's negative control (corrupt a persisted value -> equality flips)
+> proves the test has teeth - log that as a highlight. Approved - commit S5 with
+> your subject and push.
+>
+> Sequencing change before the next sprint: do S6 (dashboard) BEFORE S5b. The
+> brief is already satisfied on the upload path at S5, so S6 on uploaded-files
+> gives a complete, submittable visual MVP without the SSRF clone on the critical
+> path; S5b (repo-URL) then becomes pure upside that adds a URL input to the
+> existing dashboard. Open the S6 start gate now: a dashboard served by FastAPI,
+> consuming the documented API only, on the upload path - Risk Score gauge +
+> grade, findings table (severity badge by colour AND text, the rendered
+> explanation, the control reference links), empty/error states, and
+> behavioral/integration tests. Defer the repo-URL input to after S5b. Propose
+> the minimal UI ticket (Goal / Context / Constraints / Done-when) and STOP.
+
+---
+
 ## Timer
 - **T0 start**: turn 1 (2026-06-22)
 - **Goal**: MVP in 4–6h active build time

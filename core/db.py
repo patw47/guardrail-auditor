@@ -1,28 +1,29 @@
 """Thin SQLite layer: engine, session, declarative base, init.
 
-Deliberately thin for S0 — NO domain tables. The concrete schema
-(Scan/Finding/Score/Control) is the S5 sensitive gate and accretes there.
+The schema itself lives in core/tables.py (registered on Base); db.py only owns
+the connection, session factory, base, and init. The DB URL is env-overridable
+(DATABASE_URL) so tests can point at an isolated temp database.
 """
 
 from __future__ import annotations
 
+import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
-DATABASE_URL = "sqlite:///./guardrail.db"
+DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite:///./guardrail.db")
 
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 
 class Base(DeclarativeBase):
-    """Declarative base. Domain tables register on this in later sprints (S5)."""
+    """Declarative base. Domain tables (core/tables.py) register on this."""
 
 
 def init_db() -> None:
-    """Create all tables registered on ``Base``.
+    """Create all tables registered on ``Base``."""
+    from core import tables  # noqa: F401  -- import registers the ORM models on Base
 
-    Thin at S0: no domain tables are registered yet, so this is a no-op create
-    that simply opens the SQLite file. Tables accrete from S5.
-    """
     Base.metadata.create_all(bind=engine)

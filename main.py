@@ -1,7 +1,4 @@
-"""Thin application entry: FastAPI app + health probe.
-
-Domain routers accrete under `api/` at S5; this entry stays thin.
-"""
+"""Thin application entry: FastAPI app + health probe + scan API router."""
 
 from __future__ import annotations
 
@@ -10,17 +7,19 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from api.routes import router
 from core.db import init_db
 
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
-    """Initialise the (thin) database on startup. No domain tables yet (S5)."""
+    """Create the database schema on startup."""
     init_db()
     yield
 
 
 app = FastAPI(title="Guardrail Auditor", version="0.0.0", lifespan=lifespan)
+app.include_router(router, prefix="/api")
 
 
 @app.get("/health")

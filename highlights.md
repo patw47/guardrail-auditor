@@ -65,3 +65,13 @@ CATCH · DISCRIMINATION · GATE · DECISION · GENERALITY · MAPPING · METRIC
   CIS RDS sub-number — cited §2.3 with a visible `(section)` marker instead. A
   fabricated control id would be the worst credibility hit for an audit tool;
   the marker turns the limitation into a maturity signal.
+
+## S5
+- **GATE** — the 4-table schema passed a type-3 sensitive gate *before* any code;
+  then the **persisted-vs-pipeline round-trip** proved the API layer didn't drift
+  from the deterministic core (VERIFIER's negative control: corrupt a persisted
+  value → equality flips). API-first, evidence-backed.
+- **GENERALITY** — one `ConfigSource` abstraction and one `run_scan` entry: the
+  REST API is a thin client of the same pure pipeline (parse→detect→score→map),
+  and the public-repo-URL source (S5b) slots in behind the same protocol with no
+  API change. `POST /api/scans` → 201 with a 95/F scored, control-mapped result.

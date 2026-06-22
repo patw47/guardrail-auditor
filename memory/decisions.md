@@ -103,6 +103,23 @@ _(SCRIBE; re-read at sprint start. Write only what a later sprint needs.)_
   severity — cited source and severity agree. Tested.
 - **ADAPTER §1 fence:** `map_finding` only returns controls in `CONTROL_MAP`;
   unknown rule_id → `[]`; mapping never alters a finding/score. Tested.
+
+## S5
+- **`ConfigSource` protocol** (`core/config_source.py`): `iter_files() ->
+  Iterable[(filename, content)]` + `source_type`. S5 ships `UploadedFilesSource`
+  only; **S5b adds `RepoUrlSource` behind the same protocol** (no API change).
+- **`run_scan(source) -> ScanResult`** (`core/pipeline.py`) is the single
+  pipeline entry: parse→detect→score→map→render. `ScanResult` mirrors the
+  persisted shape (ScoreSummary + MappedFinding[]), so the round-trip can compare
+  persisted-vs-pipeline by `==`.
+- **Schema** (4 tables) in `core/tables.py`, separate from pure `models/`; the
+  **repository** (`core/repository.py`) maps domain↔ORM. `explanation` + `weight`
+  denormalized onto findings (dashboard reads them directly).
+- **`DATABASE_URL` env var** (default `sqlite:///./guardrail.db`) — tests set it
+  to a temp file in `conftest.py` BEFORE importing `core.db`, isolating the DB.
+- **API is a thin client of the pure pipeline** — routes persist a `run_scan`
+  result and serve it back; OpenAPI auto-documents every endpoint via the
+  `api/schemas.py` Pydantic response models. S6 dashboard consumes this same API.
 - **Public-via-policy detection** keys on a statement with `Effect: Allow` + a
   wildcard `Principal` AND **no scoping `Condition`** — a `Condition`
   (e.g. `aws:SourceIp`/`aws:SourceVpce`) means NOT public. This is the exact
