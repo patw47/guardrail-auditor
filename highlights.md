@@ -54,3 +54,14 @@ CATCH · DISCRIMINATION · GATE · DECISION · GENERALITY · MAPPING · METRIC
   sum: a severity floor (any critical ⇒ ≤ D, any high ⇒ ≤ C) means a lone
   critical can't hide behind an additive total, and weights (1 critical 50 >
   2 highs 30) keep the OPEN_SSH=critical ruling meaningful in the score.
+
+## S4
+- **MAPPING** — every finding now carries *verified* named compliance controls +
+  a deterministic explanation: e.g. OPEN_SSH → CIS AWS v3.0.0 §5.2 · SOC 2 CC6.1
+  · ISO 27001:2022 A.8.20, with real reference URLs. The audit tool speaks the
+  auditor's language (CIS / SOC 2 / ISO 27001 / GDPR), no LLM in the path.
+- **DECISION** — source-checking the control ids caught a version drift (S3 BPA
+  is §2.1.4 in v3.0.0, not v1.4's §2.1.5) and refused to guess the unverifiable
+  CIS RDS sub-number — cited §2.3 with a visible `(section)` marker instead. A
+  fabricated control id would be the worst credibility hit for an audit tool;
+  the marker turns the limitation into a maturity signal.

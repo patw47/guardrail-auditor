@@ -729,6 +729,99 @@ Architect prompts logged **verbatim**, every turn (SCRIBE duty).
 
 ---
 
+## Prompt #22 — T0 (2026-06-22) — Gate S4: verify control IDs, drop AVD framework, add SOC2
+
+> [GATE S4 - structure approved, two source fixes + one addition before code]
+> The deterministic core (no LLM this sprint), the pure render() with clean
+> missing-line handling (no :None), the ADAPTER §1 fence test, and refusing to
+> ship a fabricated URL are all right. Three changes before code:
+>
+> 1. VERIFY the CIS/ISO control IDs against a pinned benchmark version - do not
+>    assert them. CIS AWS Foundations numbering changes across versions (v1.2 vs
+>    v1.4 vs v3.0), so "CIS AWS 5.2" for SSH may be wrong - in older versions the
+>    SSH-0.0.0.0/0 control was 4.1. Pin ONE CIS version (state it, e.g. v3.0.0)
+>    and verify each control_id against it the same way you source-checked the S2
+>    severities (read the authoritative source, not memory). If a precise number
+>    isn't verifiable, cite the benchmark section, never a guessed number. Same
+>    for ISO 27001 Annex A control refs. A fabricated control id is the single
+>    worst credibility hit for an audit tool.
+>
+> 2. AVD is NOT a compliance framework - drop it from the Framework enum. AVD is
+>    your severity-anchor/provenance, not a control an auditor cites. The
+>    dashboard's "Compliance:" line must show only CIS / SOC 2 / ISO 27001 / GDPR.
+>    Keep the AVD anchor as a separate severity-source field (or in
+>    decisions.md), used by the governing-rule test (criterion 3), but never
+>    rendered as a compliance control.
+>
+> 3. Add SOC 2 where it fits - it's named in the brief and it's the client's core
+>    business (TeamMate = audit), but it's absent from every row. Map OPEN_SSH and
+>    S3_PUBLIC_BUCKET to SOC 2 CC6.1 (logical access controls) - verify the
+>    criterion ref, don't assert it.
+>
+> URL sourcing ruling: never fabricate a per-control deep link. GDPR ->
+> gdpr-info.eu deep links (fine), AVD technical ref -> avd.aquasec.com/misconfig/
+> <id>, CIS/ISO -> control-id + the pinned-benchmark landing URL. Honest over
+> precise-but-fake.
+>
+> Everything else approved: Control schema, map_finding, the fence test, render()
+> purity, criterion 3 scoped to the AVD anchor. Re-propose the corrected mapping
+> table (verified IDs + pinned CIS version + SOC 2 rows + AVD moved out of the
+> framework list) for my nod, then build + tests, and STOP at the S4 evidence
+> gate. At that gate I want the real per-finding dump: each finding -> its
+> controls + the rendered explanation, with real reference_urls.
+
+---
+
+## Prompt #23 — T0 (2026-06-22) — Gate S4 table approved; build
+
+> [GATE S4 OK - table approved, build it]
+> Source-check is exactly right: CIS pinned to v3.0.0, two IDs corrected (SSH
+> §5.2, S3 §2.1.4 - the version drift), ISO 2022 + SOC 2 CC6.1 confirmed, and
+> refusing to guess the RDS sub-number is the correct call, not a gap. Table
+> approved as verified.
+>
+> PUBLIC_DB CIS ruling: keep section-level §2.3, don't drop CIS. ISO 27001:2022
+> A.8.20 is PUBLIC_DB's primary named control (criterion 2 satisfied); CIS §2.3
+> rides along explicitly marked as section-level. Citing the section because the
+> precise sub-number wasn't verifiable is a maturity signal - surface it, don't
+> hide it. Seed it in LIMITATIONS.md (CIS RDS sub-number unverified -> cited at
+> section level).
+>
+> One requirement on the output: the distinction between a verified precise
+> control (e.g. CIS §5.2) and a section-level cite (CIS §2.3) must be VISIBLE in
+> the rendered/stored output, not only in your notes - a reader must not mistake
+> §2.3 for a precise control. A simple marker like "§2.3 (section)" is enough.
+>
+> Everything approved. Build models/control.py + core/compliance.py (table +
+> map_finding + pure render) + tests (fence: no stray control_id; governing-rule:
+> AVD anchor severity == detector severity; render determinism incl. the no-line
+> case -> no :None). Run L1 and STOP at the S4 evidence gate with the real
+> per-finding dump: each finding -> its named controls + the rendered explanation
+> + real reference_urls.
+
+---
+
+## Prompt #24 — T0 (2026-06-22) — Gate S4 APPROVED; commit + push; open S5
+
+> [GATE S4 OK] Evidence is conclusive: the per-finding dump shows verified
+> controls + rendered explanations + real reference_urls, the section-level
+> marker is visible in output (§2.3 (section) vs §5.2 clean), the version
+> corrections hold (2.1.5->2.1.4, SSH §5.2), the ADAPTER §1 fence and the
+> governing-rule severity match all pass, render() is pure with no :None, and the
+> diff confirms zero regression / no new dep. The differentiator layer is sourced,
+> not asserted - exactly the bar for an audit tool. Approved - commit S4 with your
+> subject and push.
+>
+> Then open the S5 start gate. S5 carries the DB-schema sensitive gate (gate type
+> 3): surface the Scan/Finding/Score/Control table design for my approval BEFORE
+> any code. Scope = REST API + uploaded-files ConfigSource + persistence ONLY (NOT
+> the repo-URL ConfigSource - that's S5b). Acceptance must include the
+> write->read round-trip (a Scan with its Findings + Score + controls reads back
+> identical) and OpenAPI documenting every endpoint. Propose the ticket (Goal /
+> Context / Constraints / Done-when) with the schema called out, and STOP.
+
+---
+
 ## Timer
 - **T0 start**: turn 1 (2026-06-22)
 - **Goal**: MVP in 4–6h active build time

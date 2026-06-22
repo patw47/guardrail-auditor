@@ -31,3 +31,12 @@ _(SCRIBE; re-read at sprint start. Write only what a later sprint needs.)_
 - No bug this sprint. Applied the S2 lesson: wrote the `decisions.md` S3 dials
   (weights/bands/floor) in the SAME change as `core/scoring.py`, so the
   VERIFIER's D3 doc-vs-code check passed first time — no H2-style doc-drift FAIL.
+
+## S4
+- **Compliance control numbering drifts across benchmark versions — verify, never
+  recall.** CIS AWS S3 Block-Public-Access was `2.1.5` in v1.4 but `2.1.4` in the
+  pinned v3.0.0; SSH was `4.x` in v1.2 but `5.2` in v3.0.0. Source-checked each
+  against v3.0.0 (same method as the S2 severities). When a precise sub-number
+  isn't verifiable (CIS RDS), cite the section with a visible `(section)` marker
+  rather than guess — a fabricated control id is the worst credibility hit for an
+  audit tool.

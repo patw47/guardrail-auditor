@@ -84,6 +84,25 @@ _(SCRIBE; re-read at sprint start. Write only what a later sprint needs.)_
 - **Breakdown** = one `ScoreItem` per finding (rule_id, severity, resource,
   file, line, weight), ordered `(severity_rank, rule_id, file, line)` for
   determinism. `Score.counts` = findings per severity.
+
+## S4
+- **Compliance mapping** in `core/compliance.py`: `map_finding(finding) ->
+  list[Control]` via the static `CONTROL_MAP` keyed by `rule_id`; pure
+  `render(finding) -> str`. **No LLM, no runtime network** (URLs are static).
+- **`Framework` = CIS / SOC2 / ISO27001 / GDPR only.** AVD is NOT a framework —
+  it lives in a separate `AVD_ANCHOR` table (severity provenance) used by the
+  governing-rule test, never rendered as a compliance control.
+- **Verified control ids** (pinned **CIS AWS v3.0.0**, **ISO 27001:2022**,
+  **SOC 2 TSC CC6.1**, **GDPR Art. 32**): OPEN_SSH→CIS §5.2 + SOC2 CC6.1 + ISO
+  A.8.20; S3_PUBLIC_BUCKET→CIS §2.1.4 + SOC2 CC6.1 + ISO A.5.15 + GDPR Art.32;
+  UNENCRYPTED_STORAGE→CIS §2.2.1 + ISO A.8.24 + GDPR Art.32; PUBLIC_DB→ISO A.8.20
+  (primary) + CIS §2.3 (section-level, see [[LIMITATIONS]]).
+- **Precision is visible:** `Control.level` ∈ {precise, section}; a section cite
+  renders as `§2.3 (section)` so it can't be mistaken for a precise control.
+- **Governing rule (S2) bound:** `AVD_ANCHOR[rule_id].severity == RULES[rule_id]`
+  severity — cited source and severity agree. Tested.
+- **ADAPTER §1 fence:** `map_finding` only returns controls in `CONTROL_MAP`;
+  unknown rule_id → `[]`; mapping never alters a finding/score. Tested.
 - **Public-via-policy detection** keys on a statement with `Effect: Allow` + a
   wildcard `Principal` AND **no scoping `Condition`** — a `Condition`
   (e.g. `aws:SourceIp`/`aws:SourceVpce`) means NOT public. This is the exact

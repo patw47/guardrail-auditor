@@ -21,6 +21,18 @@ Known limitations, deferrals, and source-conflict adjudications — shown, not h
   the current `rds/disable_public_access.rego` says HIGH (the legacy tfsec doc
   page's "critical" is stale drift).
 
+## Compliance-mapping provenance
+
+### PUBLIC_DB → CIS: precise sub-number unverified, cited at section level
+- The CIS AWS Foundations Benchmark **v3.0.0** RDS-public-access control could
+  not be verified to a precise sub-number from an authoritative source (search
+  surfaced AWS Security Hub's `RDS.2`, which is not a CIS number). Rather than
+  guess `2.3.3`, `PUBLIC_DB` cites **CIS §2.3 (RDS section)** marked
+  `level="section"`, rendered visibly as `§2.3 (section)`. Its **primary** named
+  control is **ISO 27001:2022 A.8.20** (verified). Surfaced, not hidden.
+- All other CIS ids verified against v3.0.0: SSH **§5.2**, S3 BPA **§2.1.4**
+  (drift from v1.4's 2.1.5), EBS encryption **§2.2.1**.
+
 ## Deferrals (roadmap)
 - **S3 server-side-encryption absence:** `UNENCRYPTED_STORAGE` is scoped to an
   explicit `encrypted=false` on EBS/RDS only; SSE-absent buckets are noisier and
