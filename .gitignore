@@ -61,6 +61,11 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 
+# Guardrail Auditor — local dev SQLite (init_db writes ./guardrail.db); never commit
+*.db
+*.sqlite3
+guardrail.db
+
 # Flask stuff:
 instance/
 .webassets-cache
