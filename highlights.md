@@ -87,3 +87,17 @@ CATCH · DISCRIMINATION · GATE · DECISION · GENERALITY · MAPPING · METRIC
 - **GATE** — **MVP (S0–S6) closed**: scaffold → parsers → detectors (L3 pairs) →
   Risk Score → compliance mapping → REST API + persistence → dashboard, every
   sprint through a 2-gate loop with an independent read-only VERIFIER.
+
+## S7
+- **DISCRIMINATION** — a published **coverage matrix** (`docs/coverage_matrix.md`,
+  12 cases, all PASS) proves every detector fires on its TP and stays silent on
+  its near-miss, INCLUDING the hard wildcard+`Condition` Checkov-style FP — and
+  the verdict column is sourced from **real `pytest --junitxml` output**, not a
+  hand-run (guarded against drift).
+- **METRIC** — external oracle: **Checkov 3.2.334 × TerraGoat** (pinned), genuine
+  reference committed. **K→K agreement 3/3** on the rules TerraGoat exercises
+  (OPEN_SSH/PUBLIC_DB/UNENCRYPTED_STORAGE); S3 has no positive case — stated, not
+  padded. *"Checkov validates; the copilot differentiates."*
+- **GATE** — the VERIFIER independently confirmed the Checkov reference is
+  *genuine tool output* (line ranges match the files, verdicts match reality),
+  not synthesized — the anti-fabrication bar for an audit tool, met.

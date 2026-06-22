@@ -54,3 +54,14 @@ _(SCRIBE; re-read at sprint start. Write only what a later sprint needs.)_
   run hid an E501 failure (only the missing `&& echo OK` revealed it). Don't
   silence linter stdout in evidence runs — show the real output. (The line was
   fixed; ladder green.)
+
+## S7
+- **Vendoring a public vuln-corpus needs a secret-redaction pass.** TerraGoat
+  ships deliberate fake credentials (incl. an AWS example key in `user_data`);
+  committing them verbatim risks GitHub push-protection blocking the push.
+  Redacted secret values to `REDACTED-FOR-COMMIT` (only credential strings, not
+  the detector-relevant attributes) and re-verified detection unchanged.
+- **Oracle honesty beats a flattering number.** TerraGoat doesn't exercise
+  S3_PUBLIC_BUCKET's positive case (no public-via-ACL bucket); rather than pad
+  the agreement, K→K counts only the rules TerraGoat actually hits (3/3) and the
+  gap is stated. Divergences are labelled WIN vs limitation, never reconciled.

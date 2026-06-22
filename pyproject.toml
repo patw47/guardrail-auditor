@@ -24,6 +24,9 @@ dev = [
     "pytest>=8.3",
     "httpx>=0.28",
 ]
+oracle = [
+    "checkov==3.2.334",  # S7 Part B external oracle — DEV/CI-ONLY, never a runtime dep
+]
 
 # Single dependency source of truth — no requirements.txt.
 # Install: pip install -e ".[dev]"

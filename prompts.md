@@ -947,6 +947,72 @@ Architect prompts logged **verbatim**, every turn (SCRIBE duty).
 
 ---
 
+## Prompt #29 — T0 (2026-06-22) — Gate S7 approved + four refinements; build A then B
+
+> [GATE S7 OK - approach approved, four refinements]
+> The verdict-sourcing method is exactly right and provably not a hand-run:
+> manifest -> pytest --junitxml -> generator (verdict column IS the pytest
+> outcome) -> committed matrix, with the L1 guard test asserting every
+> proving_test is real, every detector has TP+near-miss (incl. the hard
+> conditioned-policy), and the committed matrix matches the manifest. Approved.
+> Part B's pinned-and-committed-reference approach approved. Four refinements:
+>
+> 1. Distinguish divergence TYPES in Part B. When my detector and Checkov disagree
+>    on TerraGoat, separate (a) "I stay silent where Checkov false-positives / I'm
+>    stricter and correct" = a WIN to surface, from (b) "I miss something Checkov
+>    catches" = an honest limitation. Both go in LIMITATIONS.md but labelled
+>    differently; never reconcile silently either way.
+>
+> 2. Oracle completeness honesty: state which of my 4 rules TerraGoat actually
+>    exercises. If TerraGoat has no resource triggering a rule, that rule has no
+>    oracle evidence - say so; K->K only counts the rules TerraGoat actually hits.
+>
+> 3. Keep the two evidence streams DISTINCT: the coverage matrix (Part A) proves
+>    discrimination on my labelled corpus incl. the hard FP-trap; the oracle (Part
+>    B) proves agreement-with-a-reference-tool on TerraGoat. Different things -
+>    don't conflate them in any claim.
+>
+> 4. Anti-fabrication: tests/oracle/SOURCES.md must record the EXACT reproducible
+>    command (Checkov version, TerraGoat SHA, flags) so I could re-run it and get
+>    the committed reference. The VERIFIER confirms the committed Checkov output is
+>    genuine tool output (real CKV_* ids, real format), not synthesized.
+>
+> Before PART B: it does a one-time LOCAL external op on my machine - shallow-clone
+> TerraGoat + pip-install Checkov + run it once (read-only static, never apply),
+> then commit the pinned artifacts. That's the §c.3 sensitive item; I authorize
+> that one-time local clone+install+run. Build PART A first, then PART B, run L1,
+> present the matrix as L3 evidence, and STOP at the S7 evidence gate.
+
+---
+
+## Prompt #30 — T0 (2026-06-22) — Gate S7 APPROVED; commit; open S5b
+
+> [GATE S7 OK] Conclusive, and this is the strongest signal in the build. Stream A:
+> 12-case matrix, all PASS, generated from real JUnit (stable hash on re-run), guard
+> test enforces completeness incl. the hard conditioned-policy near-miss -> PASS
+> (silent) in a committed artifact. Stream B: K->K = 3/3 agreement with Checkov
+> 3.2.334 on TerraGoat 729f8da (OPEN_SSH/PUBLIC_DB/UNENCRYPTED_STORAGE all both-FAIL
+> on the same resource), reference genuine (VERIFIER confirms real CKV ids + line
+> ranges, not synthesized), reproducible via SOURCES.md, offline in CI. All four
+> refinements landed: divergences typed (TYPE(b) CKV2_AWS_6 limitation vs TYPE(a)
+> conditioned-policy win, kept on Stream A), completeness honest (S3 stated as no
+> positive case in TerraGoat, so 3/3 not an inflated 4/4), streams distinct,
+> anti-fabrication via reproducible SOURCES.md. Redacting the vendored TerraGoat
+> secrets before commit was exactly the right instinct. Approved - commit S7 with
+> your subject and push.
+>
+> Then open the S5b start gate: the public-repo-URL ConfigSource - shallow,
+> read-only clone, https-only, exact-match host allowlist, no tokens; carries the
+> network-clone sensitive gate (type 3), surfaced at the start gate before any code.
+> Acceptance: the SSRF discrimination test (non-allowlisted host like
+> 169.254.169.254 / localhost REJECTED, allowlisted https host accepted) + the
+> parity test (same files via upload vs via repo_url -> identical findings + score)
+> + the deferred Rescan button now that the source is re-fetchable. Propose the
+> ticket (Goal / Context / Constraints / Done-when) with the clone/allowlist
+> behavior called out, and STOP.
+
+---
+
 ## Timer
 - **T0 start**: turn 1 (2026-06-22)
 - **Goal**: MVP in 4–6h active build time

@@ -1,0 +1,197 @@
+[
+  {
+    "check_id": "CKV2_AWS_6",
+    "check_name": "Ensure that S3 bucket has a Public Access block",
+    "check_result": {
+      "result": "FAILED"
+    },
+    "resource": "aws_s3_bucket.data",
+    "file_path": "/s3.tf",
+    "file_line_range": [
+      1,
+      21
+    ]
+  },
+  {
+    "check_id": "CKV2_AWS_6",
+    "check_name": "Ensure that S3 bucket has a Public Access block",
+    "check_result": {
+      "result": "FAILED"
+    },
+    "resource": "aws_s3_bucket.data_science",
+    "file_path": "/s3.tf",
+    "file_line_range": [
+      89,
+      111
+    ]
+  },
+  {
+    "check_id": "CKV2_AWS_6",
+    "check_name": "Ensure that S3 bucket has a Public Access block",
+    "check_result": {
+      "result": "FAILED"
+    },
+    "resource": "aws_s3_bucket.financials",
+    "file_path": "/s3.tf",
+    "file_line_range": [
+      42,
+      63
+    ]
+  },
+  {
+    "check_id": "CKV2_AWS_6",
+    "check_name": "Ensure that S3 bucket has a Public Access block",
+    "check_result": {
+      "result": "FAILED"
+    },
+    "resource": "aws_s3_bucket.flowbucket",
+    "file_path": "/ec2.tf",
+    "file_line_range": [
+      271,
+      288
+    ]
+  },
+  {
+    "check_id": "CKV2_AWS_6",
+    "check_name": "Ensure that S3 bucket has a Public Access block",
+    "check_result": {
+      "result": "FAILED"
+    },
+    "resource": "aws_s3_bucket.logs",
+    "file_path": "/s3.tf",
+    "file_line_range": [
+      113,
+      141
+    ]
+  },
+  {
+    "check_id": "CKV2_AWS_6",
+    "check_name": "Ensure that S3 bucket has a Public Access block",
+    "check_result": {
+      "result": "FAILED"
+    },
+    "resource": "aws_s3_bucket.operations",
+    "file_path": "/s3.tf",
+    "file_line_range": [
+      65,
+      87
+    ]
+  },
+  {
+    "check_id": "CKV_AWS_16",
+    "check_name": "Ensure all data stored in the RDS is securely encrypted at rest",
+    "check_result": {
+      "result": "FAILED"
+    },
+    "resource": "aws_db_instance.default",
+    "file_path": "/db-app.tf",
+    "file_line_range": [
+      1,
+      42
+    ]
+  },
+  {
+    "check_id": "CKV_AWS_17",
+    "check_name": "Ensure all data stored in RDS is not publicly accessible",
+    "check_result": {
+      "result": "FAILED"
+    },
+    "resource": "aws_db_instance.default",
+    "file_path": "/db-app.tf",
+    "file_line_range": [
+      1,
+      42
+    ]
+  },
+  {
+    "check_id": "CKV_AWS_20",
+    "check_name": "S3 Bucket has an ACL defined which allows public READ access.",
+    "check_result": {
+      "result": "PASSED"
+    },
+    "resource": "aws_s3_bucket.data",
+    "file_path": "/s3.tf",
+    "file_line_range": [
+      1,
+      21
+    ]
+  },
+  {
+    "check_id": "CKV_AWS_20",
+    "check_name": "S3 Bucket has an ACL defined which allows public READ access.",
+    "check_result": {
+      "result": "PASSED"
+    },
+    "resource": "aws_s3_bucket.data_science",
+    "file_path": "/s3.tf",
+    "file_line_range": [
+      89,
+      111
+    ]
+  },
+  {
+    "check_id": "CKV_AWS_20",
+    "check_name": "S3 Bucket has an ACL defined which allows public READ access.",
+    "check_result": {
+      "result": "PASSED"
+    },
+    "resource": "aws_s3_bucket.financials",
+    "file_path": "/s3.tf",
+    "file_line_range": [
+      42,
+      63
+    ]
+  },
+  {
+    "check_id": "CKV_AWS_20",
+    "check_name": "S3 Bucket has an ACL defined which allows public READ access.",
+    "check_result": {
+      "result": "PASSED"
+    },
+    "resource": "aws_s3_bucket.flowbucket",
+    "file_path": "/ec2.tf",
+    "file_line_range": [
+      271,
+      288
+    ]
+  },
+  {
+    "check_id": "CKV_AWS_20",
+    "check_name": "S3 Bucket has an ACL defined which allows public READ access.",
+    "check_result": {
+      "result": "PASSED"
+    },
+    "resource": "aws_s3_bucket.logs",
+    "file_path": "/s3.tf",
+    "file_line_range": [
+      113,
+      141
+    ]
+  },
+  {
+    "check_id": "CKV_AWS_20",
+    "check_name": "S3 Bucket has an ACL defined which allows public READ access.",
+    "check_result": {
+      "result": "PASSED"
+    },
+    "resource": "aws_s3_bucket.operations",
+    "file_path": "/s3.tf",
+    "file_line_range": [
+      65,
+      87
+    ]
+  },
+  {
+    "check_id": "CKV_AWS_24",
+    "check_name": "Ensure no security groups allow ingress from 0.0.0.0:0 to port 22",
+    "check_result": {
+      "result": "FAILED"
+    },
+    "resource": "aws_security_group.web-node",
+    "file_path": "/ec2.tf",
+    "file_line_range": [
+      77,
+      115
+    ]
+  }
+]

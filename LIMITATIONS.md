@@ -33,6 +33,31 @@ Known limitations, deferrals, and source-conflict adjudications — shown, not h
 - All other CIS ids verified against v3.0.0: SSH **§5.2**, S3 BPA **§2.1.4**
   (drift from v1.4's 2.1.5), EBS encryption **§2.2.1**.
 
+## External oracle (Checkov × TerraGoat) — completeness + divergences
+
+Evidence stream **B**, distinct from the Part-A coverage matrix. Checkov 3.2.334
+on TerraGoat @ `729f8da…`, read-only static (see `tests/oracle/SOURCES.md`).
+
+### Completeness — which rules TerraGoat actually exercises (K→K only)
+- **Positively exercised** (a positive case + a matching Checkov check) —
+  **agreement 3/3**: `OPEN_SSH` (CKV_AWS_24), `PUBLIC_DB` (CKV_AWS_17),
+  `UNENCRYPTED_STORAGE` (CKV_AWS_16), all on `aws_security_group.web-node` /
+  `aws_db_instance.default`.
+- **Not positively exercised:** `S3_PUBLIC_BUCKET` — TerraGoat has no
+  public-via-ACL/policy bucket; my tool AND Checkov's CKV_AWS_20 are both clear
+  (consistent, but **no positive oracle confirmation**). Stated, not hidden.
+
+### Divergences (labelled; never silently reconciled)
+- **TYPE (b) — honest limitation / scope:** Checkov flags **CKV2_AWS_6**
+  (S3 *block-public-access*) on 6 buckets; my tool does **not** implement that
+  check (I scope S3 to public-via-ACL/policy). A breadth limitation, not a
+  correctness miss on a shared check — Checkov validates breadth; the copilot
+  differentiates with control-mapping + explanation on its implemented subset.
+- **TYPE (a) — WIN:** none on TerraGoat (no wildcard+`Condition` bucket present).
+  The stricter-and-correct WIN (staying silent on the exact Checkov-style false
+  positive) is demonstrated on the project's own corpus in the **Part-A matrix**
+  (`s3_policy_conditioned.tf`), kept DISTINCT from this oracle stream.
+
 ## Deferrals (roadmap)
 - **S3 server-side-encryption absence:** `UNENCRYPTED_STORAGE` is scoped to an
   explicit `encrypted=false` on EBS/RDS only; SSE-absent buckets are noisier and

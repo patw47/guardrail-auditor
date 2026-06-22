@@ -1,0 +1,77 @@
+# Labelled fixture manifest — ground truth for the coverage matrix (Part A).
+# Each case names the detector rule, the kind (true_positive | near_miss), the
+# expected verdict, the fixture, and the pytest test that PROVES it. The matrix
+# generator joins these to the real pytest --junitxml outcomes.
+cases:
+  - rule_id: OPEN_SSH
+    kind: true_positive
+    expect: fires
+    fixture: tests/fixtures/detectors/open_ssh_open.tf
+    proving_test: tests/test_detectors.py::test_open_ssh_fires
+    note: ingress 0.0.0.0/0 to TCP 22
+  - rule_id: OPEN_SSH
+    kind: near_miss
+    expect: silent
+    fixture: tests/fixtures/detectors/open_ssh_restricted.tf
+    proving_test: tests/test_detectors.py::test_open_ssh_restricted_silent
+    note: SSH restricted to a private CIDR + 443 open to world
+  - rule_id: OPEN_SSH
+    kind: true_positive
+    expect: fires
+    fixture: tests/fixtures/detectors/open_ssh.yaml
+    proving_test: tests/test_detectors.py::test_open_ssh_cloudformation_fires
+    note: cross-format (CloudFormation) ingress 0.0.0.0/0 to 22
+  - rule_id: S3_PUBLIC_BUCKET
+    kind: true_positive
+    expect: fires
+    fixture: tests/fixtures/detectors/s3_public_acl.tf
+    proving_test: tests/test_detectors.py::test_s3_public_acl_fires
+    note: public-read ACL
+  - rule_id: S3_PUBLIC_BUCKET
+    kind: true_positive
+    expect: fires
+    fixture: tests/fixtures/detectors/s3_public_policy.tf
+    proving_test: tests/test_detectors.py::test_s3_public_policy_fires
+    note: public via bucket policy (ADAPTER section 2 TP)
+  - rule_id: S3_PUBLIC_BUCKET
+    kind: near_miss
+    expect: silent
+    fixture: tests/fixtures/detectors/s3_private_versioning.tf
+    proving_test: tests/test_detectors.py::test_s3_private_versioning_silent
+    note: private bucket + versioning (ADAPTER section 2 near-miss)
+  - rule_id: S3_PUBLIC_BUCKET
+    kind: near_miss
+    expect: silent
+    fixture: tests/fixtures/detectors/s3_policy_conditioned.tf
+    proving_test: tests/test_detectors.py::test_s3_conditioned_policy_silent
+    note: HARD - wildcard Principal + scoping Condition (the Checkov false positive)
+  - rule_id: S3_PUBLIC_BUCKET
+    kind: true_positive
+    expect: fires
+    fixture: tests/fixtures/detectors/s3_public.yaml
+    proving_test: tests/test_detectors.py::test_s3_public_cloudformation_fires
+    note: cross-format (CloudFormation) AccessControl PublicRead
+  - rule_id: UNENCRYPTED_STORAGE
+    kind: true_positive
+    expect: fires
+    fixture: tests/fixtures/detectors/unencrypted_volume.tf
+    proving_test: tests/test_detectors.py::test_unencrypted_storage_fires
+    note: EBS volume encrypted=false
+  - rule_id: UNENCRYPTED_STORAGE
+    kind: near_miss
+    expect: silent
+    fixture: tests/fixtures/detectors/encrypted_volume.tf
+    proving_test: tests/test_detectors.py::test_encrypted_storage_silent
+    note: EBS volume encrypted=true (look-alike)
+  - rule_id: PUBLIC_DB
+    kind: true_positive
+    expect: fires
+    fixture: tests/fixtures/detectors/public_db.tf
+    proving_test: tests/test_detectors.py::test_public_db_fires
+    note: RDS publicly_accessible=true
+  - rule_id: PUBLIC_DB
+    kind: near_miss
+    expect: silent
+    fixture: tests/fixtures/detectors/private_db.tf
+    proving_test: tests/test_detectors.py::test_private_db_silent
+    note: RDS publicly_accessible=false (look-alike)
