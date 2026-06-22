@@ -12,6 +12,8 @@ dependencies = [
     "uvicorn[standard]>=0.34",
     "sqlalchemy>=2.0",
     "pydantic>=2.10",
+    "python-hcl2>=4.3",       # S1: parse Terraform HCL → dict (lark-based)
+    "pyyaml>=6.0",            # S1: parse CloudFormation YAML/JSON + line marks + intrinsic tags
 ]
 
 [project.optional-dependencies]
@@ -26,7 +28,7 @@ dev = [
 # Install: pip install -e ".[dev]"
 
 [tool.setuptools]
-packages = ["api", "core", "rules", "models"]
+packages = ["api", "core", "core.parsing", "rules", "models"]
 py-modules = ["main"]
 
 [tool.ruff]

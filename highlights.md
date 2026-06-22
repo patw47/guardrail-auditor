@@ -17,3 +17,14 @@ CATCH · DISCRIMINATION · GATE · DECISION · GENERALITY · MAPPING · METRIC
   ran in a separate context (opus; Read/Grep/Bash; no Edit/Write), audited
   delivered-vs-ticket, and returned PASS with "no tampering found" — structural
   assurance demonstrated on the very first sprint.
+
+## S1
+- **DECISION** — chose a comment-stripped header line-scan over `python-hcl2`'s
+  metadata (which v8 removed) for Terraform line numbers, making finding lines
+  *provably* survive leading `#`/`//`/`/* */` comments — the exact silent break
+  the architect flagged. Proven by fixtures whose resources sit behind comment
+  blocks (public_bucket→line 6, MyBucket→line 7).
+- **GENERALITY** — one normalized `Resource` and one `parse_file()` unify
+  Terraform HCL and CloudFormation YAML/JSON behind a single ingest API; the
+  detector layer (S2) never sees a format quirk (nested blocks always lists,
+  scalars unquoted, intrinsics as marker dicts).

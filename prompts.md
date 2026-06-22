@@ -537,6 +537,55 @@ Architect prompts logged **verbatim**, every turn (SCRIBE duty).
 
 ---
 
+## Prompt #14 — T0 (2026-06-22) — Gate S1: approach approved + two refinements
+
+> [GATE S1 OK - approach approved, two refinements to fold in]
+> Strong ticket - the edge-case list, the line-number fallback, and the eject
+> rule are exactly right for the highest-risk sprint. Deps approved (python-hcl2
+> + pyyaml). .tf.json deferral approved (TF-first = HCL). The with_meta /
+> line-scan fallback is the right hedge.
+>
+> Two things to fold in, both about not pushing format quirks downstream:
+>
+> 1. Normalize nested-block shape in the Resource model. python-hcl2 can return
+>    a single nested block (one `ingress`) as a dict and repeated ones as a
+>    list; if that reaches the detectors, each one has to branch on type and
+>    will miss cases. Absorb it in the mapper: a same-named nested block is
+>    ALWAYS a list (length 1 for a single occurrence), documented, with a test
+>    proving single-vs-multiple present the same shape.
+>
+> 2. Line accuracy under comments is the most likely silent break. The TF
+>    fixture for the line-ref criterion must include comments (#, //, /* */) and
+>    blank lines BEFORE a resource, so the test proves the reported line
+>    survives comments - especially if the line-scan fallback kicks in. Same for
+>    one CFN fixture.
+>
+> Everything else approved as written. Build parsers + fixtures + tests, run L1,
+> and STOP at the S1 evidence gate - I'll want the real type/name/line output on
+> a commented multi-resource fixture, not just "passed".
+
+---
+
+## Prompt #15 — T0 (2026-06-22) — Gate S1 APPROVED; commit + push; open S2
+
+> [GATE S1 OK] Evidence is conclusive: L1 green with real output, exact
+> type/name/line on commented multi-resource fixtures (lines 6/14/7/13/4
+> asserted, not weakened), YAML/JSON parity, both refinements PASS (nested-block
+> always-list + line-under-comments), VERIFIER 7/7 PASS, constraints honored,
+> both formats land (no eject). The single `# noqa: S506` is legitimate - it's a
+> SafeLoader subclass, bandit S ruleset isn't enabled. Approved - commit S1 with
+> your proposed subject and push.
+>
+> Then open the S2 start gate: detector engine + the 4 detectors (public S3 +
+> open SSH must-have, unencrypted storage + public DB amplification), EACH with
+> its discrimination pair (true-positive MUST fire, near-miss MUST NOT). This is
+> the first L3 sprint - the adversarial pairs are the deliverable, not an extra.
+> Propose the S2 ticket (Goal / Context / Constraints / Done-when) and STOP
+> before any code. Keep the eject (ship the 2 must-haves with their pairs if the
+> sprint runs long).
+
+---
+
 ## Timer
 - **T0 start**: turn 1 (2026-06-22)
 - **Goal**: MVP in 4–6h active build time
