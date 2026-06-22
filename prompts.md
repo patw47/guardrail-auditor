@@ -1103,6 +1103,43 @@ Architect prompts logged **verbatim**, every turn (SCRIBE duty).
 
 ---
 
+## Prompt #35 — T0 (2026-06-22) — Gate P1/P3 epics approved; write the two EPIC.md
+
+> [GATE P1/P3 epics OK - structure approved, write them]
+> The seam table is exactly right: P2/P1/P3 side by side, only the 2 adapter
+> clauses change, and the closing row names what stays identical (detector ->
+> discrimination pair, deterministic aggregate score, map-to-taxonomy, matrix +
+> oracle). That's what turns "three projects" into "one method." The per-module
+> FP-traps are the real domain discriminators (idle != orphaned; benign burst !=
+> spike), the honesty line is well-framed, and PROTOCOL.md is referenced not
+> rewritten. Sprint ordering approved (remediation/webhook before API, per the
+> brief's signature deliverable). MVP boundary at the dashboard, assurance
+> post-MVP - approved, mirrors P2.
+>
+> One requirement: in each epic, the S2 Done-when must REQUIRE the TP + near-miss
+> discrimination pair as CI tests (not just name it in the sprint title) - that's
+> what makes these build-ready specs rather than vaguely-described ones. Same
+> ticket shape as P2's S2.
+>
+> Write the two files - future-modules/P1-finops/EPIC.md and
+> future-modules/P3-sre/EPIC.md (specs only, no code, no scaffold) - then STOP.
+
+---
+
+## Prompt #36 — T0 (2026-06-22) — Gate P1/P3 epics APPROVED; commit (Phase 3 complete)
+
+> [GATE P1/P3 epics OK] Both specs conclusive: PROTOCOL.md/CLAUDE.md/verifier.md
+> referenced for reuse not rewritten (only ADAPTER.md's 2 clauses swap) - the seam
+> is real, the method generalizes. Each S2 Done-when requires the TP + near-miss
+> discrimination pair as committed CI tests in full P2-S2 ticket shape, with the
+> verbatim clause-2 trap (P1: unattached-30d fires / attached-low-IO silent; P3:
+> 10x spike fires / benign burst silent). Honesty line on top, brief-faithful
+> sprint order, MVP boundary at the dashboard. Approved - commit with your subject
+> and push. Phase 3 complete: two build-ready sister-module specs proving the
+> method generalizes.
+
+---
+
 ## Timer
 - **T0 start**: turn 1 (2026-06-22)
 - **Goal**: MVP in 4–6h active build time
