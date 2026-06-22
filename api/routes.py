@@ -8,8 +8,13 @@ from typing import cast
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from sqlalchemy.orm import Session
 
-from api.schemas import ControlOut, FindingOut, ScanDetail, ScanSummary, ScoreOut
-from core.config_source import UploadedFilesSource
+from api.schemas import ControlOut, FindingOut, RepoScanRequest, ScanDetail, ScanSummary, ScoreOut
+from core.config_source import (
+    ConfigSourceError,
+    RepoUrlSource,
+    UploadedFilesSource,
+    validate_repo_url,
+)
 from core.db import SessionLocal
 from core.parsing import ParseError
 from core.pipeline import run_scan
@@ -150,3 +155,39 @@ def get_scan_score(scan_id: str, db: Session = Depends(get_db)) -> ScoreOut:
     if row is None:
         raise HTTPException(status_code=404, detail="scan not found")
     return _score_out(row)
+
+
+def _scan_repo(db: Session, repo_url: str) -> ScanDetail:
+    """Validate (SSRF guard) → clone → scan → persist. Shared by repo-scan + rescan."""
+    try:
+        validate_repo_url(repo_url)
+    except ConfigSourceError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    try:
+        result = run_scan(RepoUrlSource(repo_url), strict=False)
+    except ConfigSourceError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except Exception as exc:  # clone/parse failure on a real repo
+        raise HTTPException(
+            status_code=502, detail=f"repo scan failed: {exc.__class__.__name__}"
+        ) from exc
+    scan_id = save_scan(db, result, source_ref=repo_url)
+    row = get_scan(db, scan_id)
+    if row is None:  # pragma: no cover - just saved
+        raise HTTPException(status_code=500, detail="scan vanished after save")
+    return _detail(row)
+
+
+@router.post("/scans/repo", status_code=201, response_model=ScanDetail)
+def create_repo_scan(body: RepoScanRequest, db: Session = Depends(get_db)) -> ScanDetail:
+    return _scan_repo(db, body.repo_url)
+
+
+@router.post("/scans/{scan_id}/rescan", status_code=201, response_model=ScanDetail)
+def rescan(scan_id: str, db: Session = Depends(get_db)) -> ScanDetail:
+    src = get_scan(db, scan_id)
+    if src is None:
+        raise HTTPException(status_code=404, detail="scan not found")
+    if src.source_type != "repo_url" or not src.source_ref:
+        raise HTTPException(status_code=409, detail="source not re-fetchable (upload)")
+    return _scan_repo(db, src.source_ref)

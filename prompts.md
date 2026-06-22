@@ -1013,6 +1013,57 @@ Architect prompts logged **verbatim**, every turn (SCRIBE duty).
 
 ---
 
+## Prompt #31 — T0 (2026-06-22) — Gate S5b approved; build (cleanup-on-error required)
+
+> [GATE S5b OK - sensitive gate cleared, build it]
+> SSRF guard approved: validate_repo_url runs before any clone, https-only,
+> exact-match host allowlist {github.com, gitlab.com} (rejects IP literals,
+> localhost, and the github.com.evil.com suffix look-alike), no userinfo/tokens,
+> hardened clone (--depth 1 --no-tags, GIT_TERMINAL_PROMPT=0, never apply, temp
+> dir), injectable cloner so CI stays offline. Keep the allowlist to those two -
+> each extra host is surface; Bitbucket etc. is roadmap.
+>
+> Schema change (sensitive item) approved: nullable source_ref on scans is
+> minimal and necessary for re-fetchable Rescan (NULL for uploads). Rescan
+> semantics approved: repo -> new scan, upload -> 409 "not re-fetchable" (honest -
+> an upload genuinely isn't re-clonable).
+>
+> One requirement: the temp-dir cleanup must run even if the scan raises
+> (try/finally), so a malformed repo can't leak accumulating clones - the VERIFIER
+> confirms cleanup-on-error.
+>
+> Build it, run L1, and STOP at the S5b evidence gate. At that gate I want: the
+> SSRF reject/accept dump per case (IP/localhost/non-https/userinfo/look-alike all
+> 400, allowlisted host accepted), the parity output (upload vs repo_url ->
+> identical findings+score), the Rescan 201/409 cases, and the one real-clone
+> evidence dump (a real public https repo cloned + scanned locally).
+
+---
+
+## Prompt #32 — T0 (2026-06-22) — Gate S5b APPROVED; commit; open S8 (final polish)
+
+> [GATE S5b OK] Conclusive - the SSRF guard is the thing that matters and it
+> holds: every reject case fires BEFORE any clone (VERIFIER confirms the cloner
+> spy is never called), including the github.com.evil.com suffix look-alike and
+> the userinfo case; allowlisted host accepted. Parity exact (upload vs repo_url
+> -> identical 95/F). Real network clone proven: bridgecrewio/terragoat over https
+> -> 3 findings, 80/F on real files (ec2.tf:77, db-app.tf:1), temp dir cleaned up,
+> cleanup-on-error confirmed via the raising-clone test. Hardened clone, minimal
+> schema change (nullable source_ref), upload path preserved, no runtime dep, CI
+> offline, Rescan 201/409, no tampering. The headline demo (paste public repo URL
+> -> Risk Score) works end-to-end against TerraGoat. Approved - commit S5b with
+> your subject and push.
+>
+> Then open the S8 start gate (final polish): per-finding remediation
+> (corrected IaC snippet / CLI action), README + quickstart (clone -> working scan,
+> the static-analysis / shift-left positioning, the 2 demo repos, the roadmap),
+> OpenAPI examples, and a demo seed. Acceptance: each rule type carries a
+> remediation covered by a test; README takes a new reader from clone to a working
+> scan; L1 green. Propose the README outline + the remediation approach (Goal /
+> Context / Constraints / Done-when) and STOP.
+
+---
+
 ## Timer
 - **T0 start**: turn 1 (2026-06-22)
 - **Goal**: MVP in 4–6h active build time

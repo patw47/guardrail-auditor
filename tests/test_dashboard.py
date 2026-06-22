@@ -27,7 +27,8 @@ def test_index_served_with_shell() -> None:
         assert r.status_code == 200
         assert "text/html" in r.headers["content-type"]
         for token in [
-            'id="files"', 'id="scan"', "Risk Score", "Severity", "Compliance",
+            'id="files"', 'id="scan"', 'id="repo-url"', 'id="scan-repo"', 'id="rescan"',
+            "Risk Score", "Severity", "Compliance",
             'id="gauge-arc"', 'id="empty"', "/static/app.js",
         ]:
             assert token in r.text
@@ -42,7 +43,8 @@ def test_static_assets_served() -> None:
 def test_app_js_wires_api_and_fields() -> None:
     js = (WEB / "static" / "app.js").read_text()
     for token in [
-        "/api/scans", "FormData", "res.ok", "severity.toUpperCase()",
+        "/api/scans", "/api/scans/repo", "/rescan", "source_type",
+        "FormData", "res.ok", "severity.toUpperCase()",
         "c.label", "reference_url", "findings.length", "showError",
     ]:
         assert token in js, f"app.js missing wiring: {token}"

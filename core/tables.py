@@ -21,6 +21,8 @@ class ScanRow(Base):
     created_at: Mapped[datetime] = mapped_column()
     source_type: Mapped[str] = mapped_column()
     file_count: Mapped[int] = mapped_column()
+    # repo_url for repo scans; NULL for uploads
+    source_ref: Mapped[str | None] = mapped_column(nullable=True, default=None)
 
     score: Mapped[ScoreRow] = relationship(
         back_populates="scan", uselist=False, cascade="all, delete-orphan"

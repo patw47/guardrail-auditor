@@ -3,16 +3,34 @@
 // logic here: severity, score, controls and explanations all come from the API.
 
 const $ = (id) => document.getElementById(id);
+let current = null; // { id, source_type } of the last rendered scan (for Rescan)
 
-async function scan() {
+async function scanFiles() {
   const input = $("files");
   if (!input.files.length) { showError("Choose at least one file to scan."); return; }
   const form = new FormData();
   for (const file of input.files) form.append("files", file);
+  await submit(() => fetch("/api/scans", { method: "POST", body: form }));
+}
 
+async function scanRepo() {
+  const url = $("repo-url").value.trim();
+  if (!url) { showError("Enter a public repo URL."); return; }
+  await submit(() => fetch("/api/scans/repo", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ repo_url: url }),
+  }));
+}
+
+async function rescan() {
+  if (!current || current.source_type !== "repo_url") return;
+  await submit(() => fetch(`/api/scans/${current.id}/rescan`, { method: "POST" }));
+}
+
+async function submit(request) {
   setStatus("Scanning…");
   try {
-    const res = await fetch("/api/scans", { method: "POST", body: form });
+    const res = await request();
     if (!res.ok) {
       const body = await res.json().catch(() => ({}));
       showError(`Scan failed (${res.status}): ${body.detail || "bad input"}`);
@@ -33,9 +51,11 @@ function showError(msg) {
 }
 
 function renderResult(data) {
+  current = { id: data.id, source_type: data.source_type };
   $("error").hidden = true;
   setStatus("");
   $("results").hidden = false;
+  $("rescan").hidden = data.source_type !== "repo_url"; // Rescan only for re-fetchable sources
   renderGauge(data.score);
   renderFindings(data.findings);
 }
@@ -101,5 +121,7 @@ function cell(text) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  $("scan").addEventListener("click", scan);
+  $("scan").addEventListener("click", scanFiles);
+  $("scan-repo").addEventListener("click", scanRepo);
+  $("rescan").addEventListener("click", rescan);
 });

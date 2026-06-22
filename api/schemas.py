@@ -46,3 +46,7 @@ class ScanSummary(BaseModel):
 
 class ScanDetail(ScanSummary):
     findings: list[FindingOut]
+
+
+class RepoScanRequest(BaseModel):
+    repo_url: str

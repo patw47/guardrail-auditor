@@ -17,13 +17,14 @@ from models.control import Framework, Level
 from models.finding import Severity
 
 
-def save_scan(session: Session, result: ScanResult) -> str:
+def save_scan(session: Session, result: ScanResult, source_ref: str | None = None) -> str:
     scan_id = str(uuid.uuid4())
     scan = ScanRow(
         id=scan_id,
         created_at=datetime.now(UTC),
         source_type=result.source_type,
         file_count=result.file_count,
+        source_ref=source_ref,
     )
     scan.score = ScoreRow(
         value=result.score.value,

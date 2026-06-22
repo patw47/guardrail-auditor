@@ -156,6 +156,24 @@ _(SCRIBE; re-read at sprint start. Write only what a later sprint needs.)_
   redaction never touches the attributes detectors read.
 - Claim discipline: **"Checkov validates; the copilot differentiates"** — agreement
   on K→K, NOT recall vs all Checkov.
+
+## S5b
+- **`RepoUrlSource`** = second `ConfigSource` impl (behind the same protocol, no
+  pipeline change). **SSRF-safe by construction:** `validate_repo_url` runs
+  BEFORE any clone — https-only, exact-match `ALLOWED_HOSTS = {github.com,
+  gitlab.com}` (rejects IP literals, localhost, `github.com.evil.com`, userinfo).
+  Clone is `git clone --depth 1 --no-tags`, `GIT_TERMINAL_PROMPT=0`, temp dir,
+  **never apply**, **cleanup in try/finally** (even on error). `cloner` injectable
+  → CI offline; one real clone verified locally.
+- **`run_scan(source, strict=True)`** — uploads strict (malformed → 400); repo
+  scans `strict=False` (skip non-standalone fragments).
+- **Schema:** nullable `source_ref` on `scans` (repo_url for repo scans, NULL for
+  uploads) → enables Rescan. **Rescan:** repo → new scan; upload → **409** (an
+  upload genuinely isn't re-fetchable).
+- **Endpoints:** `POST /api/scans/repo` {repo_url}, `POST /api/scans/{id}/rescan`.
+  Dashboard adds a repo-URL input + Rescan (shown only when source_type=repo_url),
+  still `/api`-only. **No new runtime dep** (git is a system tool).
+- Roadmap: more allowlist hosts (Bitbucket), per-file parse-tolerance nuances.
 - **Public-via-policy detection** keys on a statement with `Effect: Allow` + a
   wildcard `Principal` AND **no scoping `Condition`** — a `Condition`
   (e.g. `aws:SourceIp`/`aws:SourceVpce`) means NOT public. This is the exact

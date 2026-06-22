@@ -13,8 +13,16 @@
   </header>
 
   <section class="uploader">
-    <input type="file" id="files" multiple accept=".tf,.yaml,.yml,.json,.template">
-    <button id="scan" type="button">Scan</button>
+    <div class="source">
+      <label for="files">Upload files</label>
+      <input type="file" id="files" multiple accept=".tf,.yaml,.yml,.json,.template">
+      <button id="scan" type="button">Scan files</button>
+    </div>
+    <div class="source">
+      <label for="repo-url">Public repo URL</label>
+      <input type="url" id="repo-url" placeholder="https://github.com/owner/repo">
+      <button id="scan-repo" type="button">Scan repo</button>
+    </div>
     <p id="status" hidden></p>
     <p id="error" class="error" hidden></p>
   </section>
@@ -30,6 +38,7 @@
           <span id="grade" class="grade grade-A">A</span></div>
         <p class="label">Risk Score</p>
         <p id="counts" class="counts"></p>
+        <button id="rescan" type="button" hidden>Rescan repo</button>
       </div>
     </div>
 

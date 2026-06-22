@@ -101,3 +101,15 @@ CATCH · DISCRIMINATION · GATE · DECISION · GENERALITY · MAPPING · METRIC
 - **GATE** — the VERIFIER independently confirmed the Checkov reference is
   *genuine tool output* (line ranges match the files, verdicts match reality),
   not synthesized — the anti-fabrication bar for an audit tool, met.
+
+## S5b
+- **GENERALITY** — the headline *"paste a public repo URL → Risk Score"* works:
+  `RepoUrlSource` slots behind the same `ConfigSource` with **zero pipeline
+  change**, and a **parity test** proves upload ≡ repo_url (identical findings +
+  score). A real TerraGoat clone over https scored **80/F** end-to-end.
+- **DECISION** — SSRF-safe **by construction**: `validate_repo_url` runs *before*
+  any clone (https-only, exact-match allowlist — rejects `169.254.169.254`,
+  `localhost`, `github.com.evil.com`, userinfo), the clone is shallow/read-only/
+  never-apply, and the temp dir is cleaned up in `try/finally` even on error.
+  Security feature isolated from the schema, CI stays offline via an injectable
+  cloner.

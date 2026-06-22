@@ -65,3 +65,10 @@ _(SCRIBE; re-read at sprint start. Write only what a later sprint needs.)_
   S3_PUBLIC_BUCKET's positive case (no public-via-ACL bucket); rather than pad
   the agreement, K→K counts only the rules TerraGoat actually hits (3/3) and the
   gap is stated. Divergences are labelled WIN vs limitation, never reconciled.
+
+## S5b
+- No bug. Two patterns kept: (1) **validate before the side effect** — the SSRF
+  guard runs before any clone, proven by a spy cloner that's never called on a
+  bad URL; (2) **injectable cloner** keeps the network feature fully testable
+  offline in CI, with a single real clone for human evidence. Temp-dir cleanup in
+  `try/finally` (verified by a raising-clone test) prevents clone leaks.

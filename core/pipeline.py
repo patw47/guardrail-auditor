@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 from core.compliance import map_finding, render
 from core.config_source import ConfigSource
-from core.parsing import parse_content
+from core.parsing import ParseError, parse_content
 from core.scoring import WEIGHTS, score_findings
 from models import Control, Finding, Resource
 from rules import run_detectors
@@ -37,13 +37,23 @@ class ScanResult:
     items: list[MappedFinding]
 
 
-def run_scan(source: ConfigSource) -> ScanResult:
-    """Parse → detect → score → map → render, assembled deterministically."""
+def run_scan(source: ConfigSource, strict: bool = True) -> ScanResult:
+    """Parse → detect → score → map → render, assembled deterministically.
+
+    `strict=True` (uploads): a malformed recognised file raises (→ 400).
+    `strict=False` (repo scans): skip files that fail to parse, since a real repo
+    may contain non-standalone template fragments.
+    """
     files = list(source.iter_files())
     resources: list[Resource] = []
     for name, content in files:
-        if name.lower().endswith(_SUPPORTED):
+        if not name.lower().endswith(_SUPPORTED):
+            continue
+        try:
             resources.extend(parse_content(content, name))
+        except ParseError:
+            if strict:
+                raise
 
     findings = run_detectors(resources)
     score = score_findings(findings)
