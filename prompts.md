@@ -1140,6 +1140,49 @@ Architect prompts logged **verbatim**, every turn (SCRIBE duty).
 
 ---
 
+## Prompt #37 — T0 (2026-06-22) — Gate deck outline OK; generate 9-slide deck.md
+
+> [GATE deck outline OK - 9 slides, two fixes, then generate]
+> Outline approved, with two changes:
+>
+> 1. CUT slide 10 (production orchestrator). That repo is abandoned and not
+>    shown - drop the slide entirely, don't link this challenge repo as its own
+>    "productionized version". Final deck = 9 slides (1-9 as outlined).
+>
+> 2. Slide 1: fix "Wolters Kluxer" -> "Wolters Kluwer" (client name, title slide).
+>
+> Prompt count: say 37, framed honestly - "37 logged prompts (#0 is the mandated
+> Lead-Architect opener; one flagged duplicate at #17)". Don't round to 36.
+>
+> Everything else approved - 9 slides, each grounded in a real artifact, both
+> ultimate levers in (slide 6 recursive audit, slide 9 LIMITATIONS.md), honest
+> P2-built / method-generic / P1-P3-ready framing, no invented metrics. Generate
+> docs/deck.md (screenshots by path, real counts) and STOP at the gate.
+
+---
+
+## Prompt #38 — T0 (2026-06-22) — Gate deck: fix slide-5 text/image pairing; commit
+
+> [GATE deck - one consistency check before commit]
+> Deck is strong - counts consistent (4/12/3-3/85/37), "Checkov validates;
+> differentiates" with no "homemade", VERIFIER framed as context isolation, every
+> slide cites its artifact. One factual consistency fix on slide 5:
+>
+> Slide 5's TEXT describes a VERIFIER FAIL at S2 (missing AVD/CIS severity
+> citation in decisions.md while the code claimed it). But the IMAGE
+> gate-rejection.png is the [GATE A1 REJECT - VISION.md] §6 rejection - a
+> different event. Text and image must describe the SAME rejection, or an
+> evaluator catches the deck-vs-artifact mismatch.
+>
+> Check prompts.md + audit/S2.md and pick the real, well-evidenced one, then align
+> both text and image. [...] Confirm which one is real, fix the pairing, then
+> commit + push the deck.
+>
+> [RESOLUTION] Read gate-rejection.png — it shows Prompt #3 (Gate A1 reject,
+> VISION.md §6 orphan-line). Aligned slide 5 TEXT to that event; image unchanged.
+
+---
+
 ## Timer
 - **T0 start**: turn 1 (2026-06-22)
 - **Goal**: MVP in 4–6h active build time
