@@ -2,5 +2,6 @@
 
 from .finding import Finding, Severity
 from .resource import Format, Resource
+from .score import Score, ScoreItem
 
-__all__ = ["Finding", "Format", "Resource", "Severity"]
+__all__ = ["Finding", "Format", "Resource", "Score", "ScoreItem", "Severity"]

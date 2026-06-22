@@ -44,3 +44,13 @@ CATCH · DISCRIMINATION · GATE · DECISION · GENERALITY · MAPPING · METRIC
   `decisions.md`, which was missing while code already claimed it was documented.
   Doc-only remediation → re-verified PASS. The gate has teeth; it caught a
   real doc/code drift, not a cosmetic nit.
+
+## S3
+- **METRIC** — the deterministic Risk Score gives a real spread, not flat
+  weights: `multi_violation` (1 critical + 3 high) = **95/100, grade F**;
+  no findings = **0/A**; all-critical = **100/F (capped)**. Every number is
+  explained by a per-finding breakdown.
+- **DECISION** — the grade couples to the *worst severity present*, not just the
+  sum: a severity floor (any critical ⇒ ≤ D, any high ⇒ ≤ C) means a lone
+  critical can't hide behind an additive total, and weights (1 critical 50 >
+  2 highs 30) keep the OPEN_SSH=critical ruling meaningful in the score.

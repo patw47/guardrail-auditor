@@ -679,6 +679,56 @@ Architect prompts logged **verbatim**, every turn (SCRIBE duty).
 
 ---
 
+## Prompt #20 — T0 (2026-06-22) — Gate S3 approved + two dial fixes; build
+
+> [GATE S3 OK - additive-capped approved, two dial fixes]
+> The structure is right: pure function, the two edge cases ([]->0/A,
+> all-critical->cap 100/F), the per-finding breakdown, order-independent
+> determinism via the sort, and the monotonic criterion are all good. Keep
+> additive-capped - normalized would be overkill for the MVP. Two dial fixes
+> before code, both about not flattening the severity spread we just locked:
+>
+> 1. Weights flatten critical. With 40/20/10/5, one critical (40) ties two highs
+>    (40), and OPEN_SSH being critical stops meaning more - which defeats
+>    yesterday's decision. Set weights so ONE critical outranks TWO highs, e.g.
+>    critical=50, high=15, medium=5, low=1. A single critical should already
+>    read as serious.
+>
+> 2. Couple the grade to the worst severity present, not just the sum. With a
+>    pure additive cap, a lone critical can land at a reassuring grade. Add: if
+>    any finding is critical, the grade floors at D (and high floors at C). The
+>    numeric score still refines within that. Document the band table + the
+>    severity-floor rule in decisions.md so it's auditable.
+>
+> Everything else approved: additive cap at 100, breakdown, determinism,
+> monotonicity. Re-propose the final dials (weights + bands + the severity-floor)
+> in one line for my nod, then build + tests, and STOP at the S3 evidence gate.
+> I want the real score dump on the multi-violation fixture (1 critical + 3 high)
+> showing the score AND the breakdown, plus both edge cases.
+
+---
+
+## Prompt #21 — T0 (2026-06-22) — Gate S3 APPROVED; commit + push; open S4
+
+> [GATE S3 OK] Evidence is conclusive: the multi-violation dump shows 95/100 / F
+> with critical (50) outranking two highs, the severity-floor holds (lone
+> critical->D, lone high->C, 3-crit stays F), both edge cases land (0/A, cap
+> 100/F), purity confirmed (scoring imports only stdlib + models), determinism
+> via the sort (10x shuffle identical), monotonicity and breakdown
+> Sigma==raw all green, VERIFIER 7/7 + dials PASS, no tampering. Applying the S2
+> "document the dials up front" lesson is exactly the memory loop working.
+> Approved - commit S3 with your subject and push.
+>
+> Then open the S4 start gate: compliance mapping (finding -> named control +
+> reference_url via a deterministic table) + the pure render() explanation. NO
+> LLM in this sprint - the narration layer is roadmap, post-MVP. The governing
+> rule from S2 binds here: each control's reference_url page must be consistent
+> with the detector's severity (so cited source and severity agree). Propose the
+> mapping schema + the deterministic template (Goal / Context / Constraints /
+> Done-when) and STOP before any code.
+
+---
+
 ## Timer
 - **T0 start**: turn 1 (2026-06-22)
 - **Goal**: MVP in 4–6h active build time

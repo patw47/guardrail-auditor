@@ -26,3 +26,8 @@ _(SCRIBE; re-read at sprint start. Write only what a later sprint needs.)_
   said severities were "documented in decisions.md" while the S2 section wasn't
   written yet — the VERIFIER (rightly) FAILed H2 on the dangling reference. Land
   the doc in the same change as the code that cites it.
+
+## S3
+- No bug this sprint. Applied the S2 lesson: wrote the `decisions.md` S3 dials
+  (weights/bands/floor) in the SAME change as `core/scoring.py`, so the
+  VERIFIER's D3 doc-vs-code check passed first time — no H2-style doc-drift FAIL.

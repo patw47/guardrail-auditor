@@ -69,6 +69,21 @@ _(SCRIBE; re-read at sprint start. Write only what a later sprint needs.)_
   PUBLIC_DB→RDS disable-public-access (High).
 - **OPEN_SSH ruling (architect): keep CRITICAL.** AVD-page-vs-current-rego drift
   is recorded in `LIMITATIONS.md`, not hidden.
+
+## S3
+- **Risk Score = pure deterministic aggregation** (`core/scoring.py`,
+  `score_findings(findings) -> Score`). Higher = worse; 0 = clean. No I/O/LLM.
+- **Severity weights** (additive, then `min(100, Σ)`): `critical=50, high=15,
+  medium=5, low=1`. Tuned so ONE critical (50) > TWO highs (30) — keeps the
+  OPEN_SSH=critical decision meaningful, not flattened.
+- **Grade bands (numeric):** `0→A · 1–19→B · 20–39→C · 40–69→D · 70–100→F`.
+- **Severity floor (couples grade to worst severity, not just the sum):** any
+  `critical` ⇒ grade ≤ **D**; else any `high` ⇒ grade ≤ **C**. Final grade =
+  the WORSE of the numeric band and the floor (a lone high → C, a lone critical
+  → D; the floor only worsens, never improves a worse numeric grade).
+- **Breakdown** = one `ScoreItem` per finding (rule_id, severity, resource,
+  file, line, weight), ordered `(severity_rank, rule_id, file, line)` for
+  determinism. `Score.counts` = findings per severity.
 - **Public-via-policy detection** keys on a statement with `Effect: Allow` + a
   wildcard `Principal` AND **no scoping `Condition`** — a `Condition`
   (e.g. `aws:SourceIp`/`aws:SourceVpce`) means NOT public. This is the exact
