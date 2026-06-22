@@ -15,3 +15,14 @@ _(SCRIBE; re-read at sprint start. Write only what a later sprint needs.)_
   marker. Coding to the assumed (older) shape would have shipped wrong
   line-handling and quoted values. Rule for future parser/lib work: probe the
   real output shape first, don't trust remembered API docs.
+
+## S2
+- **hcl2 v8 wraps heredocs in `<<TAG` … `TAG`** around the body, so a heredoc
+  policy is NOT directly `json.loads`-able. The L3 TP test caught it (the
+  public-via-policy detector stayed silent). Fixed detector-local with
+  `_strip_heredoc` in `rules/detectors.py`. Candidate S1 follow-up (roadmap):
+  normalize heredoc bodies in the parser so no consumer sees `<<TAG`.
+- **Don't reference a doc from code before the doc exists.** `detectors.py`
+  said severities were "documented in decisions.md" while the S2 section wasn't
+  written yet — the VERIFIER (rightly) FAILed H2 on the dangling reference. Land
+  the doc in the same change as the code that cites it.

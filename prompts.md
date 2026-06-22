@@ -586,6 +586,99 @@ Architect prompts logged **verbatim**, every turn (SCRIBE duty).
 
 ---
 
+## Prompt #16 — T0 (2026-06-22) — Gate S2 approved + two hardenings; build
+
+> [GATE S2 OK - approach approved, with two hardenings]
+> Strong L3 ticket - discrimination pairs as the deliverable, cross-format TPs,
+> determinism test, and the VERIFIER anti-fake focus (no always-None/always-fire
+> detector) are exactly right. Decisions approved: (c) UNENCRYPTED_STORAGE scoped
+> to explicit encrypted=false on EBS/RDS (S3-SSE-absence -> roadmap/LIMITATIONS).
+> Two hardenings before code:
+>
+> 1. Severities: align each detector's severity with the citable authority you'll
+>    map to in S4 (AVD/CIS), so the score weights and the S4 mapping come from the
+>    same source and survive the Checkov oracle at S7. In particular reconcile
+>    S3_PUBLIC_BUCKET vs OPEN_SSH (AVD anchors SSH-open as CRITICAL); pick per the
+>    source and document the choice in memory/decisions.md.
+>
+> 2. S3_PUBLIC_BUCKET near-miss must include the hard one: a bucket policy with
+>    Principal:"*" BUT a restrictive Condition that scopes it (e.g. a VPCe / source
+>    IP condition) - this MUST NOT flag. That's the exact false positive Checkov
+>    trips on, so proving your detector stays silent here is the differentiator.
+>    Keep the private+versioning near-miss too (ADAPTER §2 verbatim).
+>
+> Everything else approved: rule_ids as the S4 join keys, policy-public via
+> wildcard-Principal Allow, the 4 detectors with their pairs, the eject (2
+> must-haves with pairs if long). Build the engine + detectors + discrimination
+> corpus, run L1, and STOP at the S2 evidence gate. At that gate I want, per
+> detector, the real TP-fires / near-miss-silent output - not just "passed".
+
+---
+
+## Prompt #17 — T0 (2026-06-22) — ANOMALY: verbatim duplicate of #12
+
+> Received a prompt identical to #12 ("[GATE 2(a) S0 — approved] … Approved.
+> BUILDER: implement exactly this tree …"). Flagged as a stale/duplicate paste,
+> NOT re-executed. S0 is already built + verified + committed/pushed as e895474.
+> Held: S2 remains at Gate 2(b) awaiting approval; no commit, no S0 rebuild.
+> Awaiting architect clarification (commit S2 + open S3, or other intent).
+>
+> RESOLVED via clarification — real intended prompt #18 below.
+
+---
+
+## Prompt #18 — T0 (2026-06-22) — Gate S2: prove severities against source before commit
+
+> [GATE S2 - substance approved, one source-check before commit]
+> The detectors are done and the discrimination is real: every detector fires on
+> its TP and is silent on a same-type near-miss (not always-None/always-fire),
+> the hard one holds - wildcard Principal + Condition stays SILENT (the exact
+> Checkov false positive), the ADAPTER §2 pair is verbatim, cross-format CFN
+> fires, determinism holds. The heredoc false-negative caught by your own L3 test
+> (fixed without touching the S1 parser) and the VERIFIER FAIL -> remediate ->
+> PASS on the severity doc/code drift are exactly the evidence this sprint should
+> produce.
+> One confirmation before you commit, because S3 turns these severities into
+> score weights: prove each severity against its citable source rather than
+> asserting it. Paste, per detector, the AVD (or CIS) ID and the severity that
+> page actually states. In particular PUBLIC_DB - you set it CRITICAL via
+> AVD-AWS-0011, but my sourcing had publicly-accessible RDS at HIGH. Reconcile
+> against the real AVD page and set each severity to what the source says; if any
+> isn't backed by its page, change it NOW, before S3 weights on it. Then I
+> approve, you commit + push, and open the S3 start gate.
+
+---
+
+## Prompt #19 — T0 (2026-06-22) — Gate S2 ruling: OPEN_SSH critical; verify then commit
+
+> [GATE S2 OK - ruling: OPEN_SSH stays CRITICAL, then commit]
+> Good source-check - reading the trivy-checks rego metadata via the GitHub API
+> when the AVD SPA wouldn't fetch is the right move, and correcting PUBLIC_DB
+> critical->high is the reconciliation I asked for.
+>
+> Ruling on OPEN_SSH: keep CRITICAL. Deciding reason = consistency with the cited
+> source: OPEN_SSH's reference_url points at the AVD-AWS-0107 page, which states
+> Critical, so the assigned severity must match the page the dashboard cites - or
+> the tool contradicts its own authority. It also matches the merits
+> (unauthenticated SSH from 0.0.0.0/0 is the textbook critical) and gives the Risk
+> Score a real spread (1 critical / 3 high) instead of flat weights. Document the
+> AVD-page-vs-current-rego drift in decisions.md (done) and seed it as
+> LIMITATIONS.md material - show the discrepancy and the adjudication, don't hide
+> it.
+>
+> Governing rule, applied to all four: each detector's severity must equal what
+> its OWN reference_url page states (this also binds S4's mapping). Confirm in one
+> line that S3_PUBLIC_BUCKET / UNENCRYPTED_STORAGE / PUBLIC_DB reference_urls will
+> point to pages consistent with HIGH, so severity and cited source agree across
+> the board.
+>
+> Before commit: run the VERIFIER once more on the severity change only - confirm
+> RULES, the test assertions, and decisions.md all agree at the final values
+> (OPEN_SSH critical, the other three high). On its PASS, commit + push S2 with
+> your subject, then open the S3 start gate.
+
+---
+
 ## Timer
 - **T0 start**: turn 1 (2026-06-22)
 - **Goal**: MVP in 4–6h active build time

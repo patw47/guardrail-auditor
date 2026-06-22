@@ -42,3 +42,36 @@ _(SCRIBE; re-read at sprint start. Write only what a later sprint needs.)_
   strings); CFN is `attributes["SecurityGroupIngress"]` (list) with `CidrIp`.
   Public-bucket signals differ too (TF `acl`/policy vs CFN `AccessControl`).
   Detectors must map BOTH native shapes onto each rule.
+
+## S2
+- **`rule_id` is the stable join key** for the S4 control mapping; `Finding`
+  carries `severity` (for the S3 score) but no control/score yet.
+- **Severities anchored to a citable authority and VERIFIED against the source
+  page/rego** (not asserted) so the S3 score weights and the S4 mapping draw on
+  the SAME source and survive the S7 Checkov/TerraGoat oracle (K→K). Verified
+  values (source = current `aquasecurity/trivy-checks` main rego, cross-read vs
+  the AVD pages):
+  | rule_id | severity | source (verified) | CIS AWS |
+  |---------|----------|-------------------|---------|
+  | `OPEN_SSH` | **critical** | AVD-AWS-0107 page = CRITICAL (search-confirmed). NOTE: current `ec2/no_public_ingress_sgr.rego` = HIGH (drift); kept CRITICAL per the AVD page + architect hardening #1 | 5.2 |
+  | `PUBLIC_DB` | **high** | `rds/disable_public_access.rego` severity: HIGH (corrected from critical — the legacy tfsec doc page said critical, stale; current rego = HIGH) | — |
+  | `S3_PUBLIC_BUCKET` | **high** | `s3/no_public_access_with_acl.rego` severity: HIGH | 2.1.5 |
+  | `UNENCRYPTED_STORAGE` | **high** | `ec2/enable_volume_encryption.rego` + `rds/encrypt_instance_storage_data.rego` severity: HIGH | 2.2.1 |
+  Reconciliation: only `OPEN_SSH` is CRITICAL (per AVD-AWS-0107 + hardening #1);
+  the other three are HIGH per their current rego. `PUBLIC_DB` was lowered
+  critical→high during the Gate-S2 source-check. These IDs are the S4 seeds.
+- **GOVERNING RULE (binds S4):** each detector's `severity` MUST equal what its
+  own `reference_url` page states — the dashboard's cited authority and the
+  assigned severity can never contradict. S4 must set each `reference_url` to a
+  page whose stated severity matches: OPEN_SSH→AVD-AWS-0107 (Critical);
+  S3_PUBLIC_BUCKET→S3 no-public-access-with-acl (High); UNENCRYPTED_STORAGE→
+  EBS enable-volume-encryption / RDS encrypt-instance-storage-data (High);
+  PUBLIC_DB→RDS disable-public-access (High).
+- **OPEN_SSH ruling (architect): keep CRITICAL.** AVD-page-vs-current-rego drift
+  is recorded in `LIMITATIONS.md`, not hidden.
+- **Public-via-policy detection** keys on a statement with `Effect: Allow` + a
+  wildcard `Principal` AND **no scoping `Condition`** — a `Condition`
+  (e.g. `aws:SourceIp`/`aws:SourceVpce`) means NOT public. This is the exact
+  Checkov false positive we deliberately stay silent on (`s3_policy_conditioned.tf`).
+- **Detectors are detect-only**; engine output sorted by `(file, line, rule_id)`
+  for determinism. Scoring is S3, mapping is S4.

@@ -28,3 +28,19 @@ CATCH · DISCRIMINATION · GATE · DECISION · GENERALITY · MAPPING · METRIC
   Terraform HCL and CloudFormation YAML/JSON behind a single ingest API; the
   detector layer (S2) never sees a format quirk (nested blocks always lists,
   scalars unquoted, intrinsics as marker dicts).
+
+## S2
+- **DISCRIMINATION** — all 4 detectors are real discriminators: each fires on its
+  true-positive and stays silent on a safe look-alike *of the same resource
+  type*. The differentiator near-miss: a bucket policy with wildcard
+  `Principal:"*"` BUT a scoping `Condition` (source-IP) stays SILENT — the exact
+  false positive Checkov trips on — alongside the ADAPTER §2 private+versioning
+  near-miss.
+- **CATCH** — the L3 true-positive test caught a real bug: hcl2 v8 wraps heredocs
+  in `<<TAG`…`TAG`, so the public-via-policy detector silently missed. Fixed
+  (`_strip_heredoc`) and re-proven green.
+- **GATE** — the independent VERIFIER FAILed S2 even though the detector code was
+  correct: hardening H2 required the AVD/CIS severity citation in
+  `decisions.md`, which was missing while code already claimed it was documented.
+  Doc-only remediation → re-verified PASS. The gate has teeth; it caught a
+  real doc/code drift, not a cosmetic nit.
