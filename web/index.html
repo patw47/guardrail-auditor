@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guardrail Auditor — Risk Score</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Guardrail Auditor</h1>
+    <p>Static IaC compliance audit — upload Terraform / CloudFormation, get a control-mapped Risk Score.</p>
+  </header>
+
+  <section class="uploader">
+    <input type="file" id="files" multiple accept=".tf,.yaml,.yml,.json,.template">
+    <button id="scan" type="button">Scan</button>
+    <p id="status" hidden></p>
+    <p id="error" class="error" hidden></p>
+  </section>
+
+  <section id="results" hidden>
+    <div class="score-card">
+      <svg viewBox="0 0 120 120" class="gauge" aria-label="Risk Score gauge">
+        <circle cx="60" cy="60" r="52" class="gauge-track"></circle>
+        <circle cx="60" cy="60" r="52" id="gauge-arc" class="arc"></circle>
+      </svg>
+      <div class="score-readout">
+        <div><span id="score-value">0</span><span class="score-max">/100</span>
+          <span id="grade" class="grade grade-A">A</span></div>
+        <p class="label">Risk Score</p>
+        <p id="counts" class="counts"></p>
+      </div>
+    </div>
+
+    <p id="empty" class="empty" hidden>No issues found — clean configuration.</p>
+
+    <table id="findings" hidden>
+      <thead>
+        <tr>
+          <th>Severity</th><th>Finding</th><th>Resource</th>
+          <th>Location</th><th>Explanation</th><th>Compliance</th>
+        </tr>
+      </thead>
+      <tbody id="findings-body"></tbody>
+    </table>
+  </section>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

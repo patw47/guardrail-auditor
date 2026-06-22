@@ -48,3 +48,9 @@ _(SCRIBE; re-read at sprint start. Write only what a later sprint needs.)_
   (`load_result == run_scan`) is a stronger check than persisted-vs-itself — the
   VERIFIER's negative control (corrupt a persisted value → equality flips)
   proved it actually catches save/load mangling.
+
+## S6
+- No product bug. Process note: piping `ruff check . >/dev/null` in an evidence
+  run hid an E501 failure (only the missing `&& echo OK` revealed it). Don't
+  silence linter stdout in evidence runs — show the real output. (The line was
+  fixed; ladder green.)

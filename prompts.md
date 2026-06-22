@@ -877,6 +877,76 @@ Architect prompts logged **verbatim**, every turn (SCRIBE duty).
 
 ---
 
+## Prompt #27 — T0 (2026-06-22) — Gate S6 approved; build dashboard (MVP close)
+
+> [GATE S6 OK - both recommendations approved, one explicit deferral]
+> Dashboard ticket is right: consumes /api only (no business logic in JS),
+> vanilla JS no-build, CSS/SVG gauge, severity by colour AND text, empty/error
+> states, control links with the section marker visible. Two decisions, both
+> your recommendation:
+>
+> 1. Control label via the API: yes. Single source of truth - a computed `label`
+>    on ControlOut (derived from framework + control_id + level, not new
+>    persisted data) keeps the section marker consistent; don't let the JS
+>    rebuild it and drift.
+>
+> 2. Dep-light behavioral tests: yes, with one note - dep-light proves the
+>    contract + the JS wiring but NOT that the DOM actually renders the gauge. I
+>    render the dashboard by hand anyway for the deck screenshot (dashboard.png),
+>    and THAT manual render is the DOM check the tests don't give. No Playwright.
+>
+> One thing you silently dropped: the Rescan button (it was in the original S6
+> spec). Don't just omit it - defer it explicitly to S5b, because "rescan the
+> same source" only makes sense for a re-fetchable URL source, not an upload
+> (which would need re-uploading). Note the deferral in the ticket + decisions.md
+> so it's a recorded decision, not a gap.
+>
+> Everything else approved. Build the dashboard + dep-light tests, run L1, and
+> STOP at the S6 evidence gate - this completes the MVP. At that gate I want: GET
+> "/" -> 200 with the shell, the static assets served, the behavioral test
+> output proving the served stack carries every rendered field, and the
+> empty/error-state assertions. I'll then render it by hand to eyeball the gauge
+> + table and grab the screenshot.
+
+---
+
+## Prompt #28 — T0 (2026-06-22) — Gate S6 APPROVED (MVP); commit; open S7 assurance
+
+> [GATE S6 OK] MVP closed. Served-stack evidence conclusive, and I've rendered it
+> by hand: the gauge shows 95/F in red, the findings table is sorted by severity
+> with colour+text badges, the control links carry the section marker
+> ("CIS AWS v3.0.0 §2.3 (section)" on PUBLIC_DB), empty and error states work.
+> Both decisions held (API-computed label, Rescan deferred to S5b documented).
+> API-only, no new dep, pipeline diff empty, VERIFIER 7/7, no tampering. Approved
+> - commit S6 with your subject and push. S0-S6 MVP is complete and submittable.
+>
+> Then open the S7 start gate (adversarial assurance - the differentiator), in
+> two parts, NO new detectors:
+>
+> PART A - coverage matrix built from the CI tests already written in S2 (not a
+> hand-run): collect every detector's true-positive + near-miss verdict into ONE
+> committed rule->case->verdict artifact, sourced from the existing pytest
+> results, cross-checked against a labelled fixture manifest. It must show, per
+> detector, TP fires + near-miss stays silent, including the hard one (wildcard
+> Principal + Condition -> SILENT).
+>
+> PART B - external oracle: run Checkov (pinned version + commit) on TerraGoat
+> (pinned commit), read-only static, never apply. Commit the Checkov reference
+> under tests/oracle/. Claim = AGREEMENT on my implemented subset (K->K), NOT
+> recall vs all Checkov - state it as "Checkov validates, the copilot
+> differentiates". Any mismatch on my subset is REPORTED as a gap and seeds
+> LIMITATIONS.md, never silently reconciled.
+>
+> Acceptance: matrix lists every shipped detector with both verdicts, consistent
+> with the manifest, provably sourced from CI tests (not hand-run); Checkov
+> agreement on my subset recorded with versions/commits pinned + reference
+> committed; any divergence listed as a gap; L1 green; no runtime dep added
+> (Checkov is dev/CI only). Before coding: confirm the matrix format + how you
+> source verdicts from the existing tests for my approval, then build, run L1,
+> present the matrix as L3 evidence, and STOP.
+
+---
+
 ## Timer
 - **T0 start**: turn 1 (2026-06-22)
 - **Goal**: MVP in 4–6h active build time

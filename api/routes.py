@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterator
+from typing import cast
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from sqlalchemy.orm import Session
@@ -14,6 +15,8 @@ from core.parsing import ParseError
 from core.pipeline import run_scan
 from core.repository import get_scan, list_scans, save_scan
 from core.tables import ControlRow, FindingRow, ScanRow
+from models import Control
+from models.control import Framework, Level
 
 router = APIRouter()
 
@@ -31,12 +34,21 @@ def _sorted_findings(row: ScanRow) -> list[FindingRow]:
 
 
 def _control_out(c: ControlRow) -> ControlOut:
+    # Reuse the domain Control.label so the section marker can't drift in the UI.
+    domain = Control(
+        framework=cast(Framework, c.framework),
+        control_id=c.control_id,
+        title=c.title,
+        reference_url=c.reference_url,
+        level=cast(Level, c.level),
+    )
     return ControlOut(
         framework=c.framework,
         control_id=c.control_id,
         title=c.title,
         reference_url=c.reference_url,
         level=c.level,
+        label=domain.label,
     )
 
 

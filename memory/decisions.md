@@ -120,6 +120,23 @@ _(SCRIBE; re-read at sprint start. Write only what a later sprint needs.)_
 - **API is a thin client of the pure pipeline** — routes persist a `run_scan`
   result and serve it back; OpenAPI auto-documents every endpoint via the
   `api/schemas.py` Pydantic response models. S6 dashboard consumes this same API.
+
+## S6
+- **Dashboard** = static `web/index.html` + `web/static/{app.js,styles.css}`,
+  served by FastAPI (`GET "/"` + `/static` mount), **consuming `/api` only** —
+  no business logic in JS. Vanilla JS, no framework, no build step, no new dep.
+- **`ControlOut.label`** is computed in the API from the domain `Control.label`
+  (single source of truth) so the `§…(section)` marker can't drift in the UI.
+  Derived, not newly persisted.
+- **Severity by colour AND text** (badge text = `SEVERITY.toUpperCase()` + a
+  `.sev-*` colour class) — never colour alone (accessibility).
+- **Behavioral tests are dep-light** (served page + API contract + JS-wiring
+  assertions); the **DOM render is checked by a manual screenshot**
+  (`docs/screenshots/dashboard.png`), not Playwright — no browser dep.
+- **DEFERRED — Rescan button → S5b.** "Rescan the same source" only makes sense
+  for a re-fetchable URL source; for an upload it would mean re-uploading. So the
+  Rescan control ships with the repo-URL input at S5b, not here. Recorded
+  decision, not an omission.
 - **Public-via-policy detection** keys on a statement with `Effect: Allow` + a
   wildcard `Principal` AND **no scoping `Condition`** — a `Condition`
   (e.g. `aws:SourceIp`/`aws:SourceVpce`) means NOT public. This is the exact

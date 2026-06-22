@@ -12,10 +12,13 @@ finding@detect, score@aggregate, control@map); SQLite is a thin layer from the
 scaffold, concrete tables + first full-scan persistence at S5. One commit per
 sprint after the evidence gate.
 
-Dependency chain:
-  S0 → S1 → S2 → S3 → S4 → S5 → S5b → S6   ← MVP boundary (scaffold → dashboard)
+Dependency chain (re-sequenced at the S5 gate — S6 before S5b):
+  S0 → S1 → S2 → S3 → S4 → S5 → S6   ← MVP boundary (scaffold → dashboard, upload path)
                           S5 ↘ S7 (assurance: needs S2 + S5, NOT S5b)
-                                         S6 ↘ S8 (polish)
+                                    S6 → S5b (repo-URL: pure upside, adds a URL input)
+                                    S6 ↘ S8 (polish)
+  Rationale: the brief is satisfied on the upload path at S5, so S6 (dashboard on
+  upload) is the complete submittable MVP; S5b (SSRF clone) is upside after S6.
 Roadmap (not planned sprints): fenced LLM narration; further detector baseline.
 
 ═══════════════════════════════════════════════════════════════════════
@@ -105,7 +108,7 @@ Roadmap (not planned sprints): fenced LLM narration; further detector baseline.
 - **Goal:** Add the second `ConfigSource` implementation ONLY: a **public-repo-URL**
   shallow, read-only clone, behind the same abstraction; scan the clone through
   the existing S5 pipeline.
-- **Depends-on:** S5
+- **Depends-on:** S5 (pipeline) + S6 (adds the repo-URL input to the existing dashboard)
 - **Sensitive gate (§c.3) — ONE, surfaced at the start gate before any code:**
   the **network clone** — SSRF-safe by construction: **https only**, **exact-match
   host allowlist**, read-only, no tokens.
@@ -115,11 +118,11 @@ Roadmap (not planned sprints): fenced LLM narration; further detector baseline.
   - **Parity test:** the same files via upload vs via `repo_url` → identical
     findings + score.
 
-### S6 — Dashboard (visual Risk Score)   ← MVP COMPLETE
+### S6 — Dashboard (visual Risk Score, upload path)   ← MVP COMPLETE
 - **Goal:** Static dashboard served by FastAPI: submit files OR paste a public
   repo URL → Risk Score gauge + grade, findings table (control mapping +
   explanation), severity breakdown chart. Client of the REST API only.
-- **Depends-on:** S5b
+- **Depends-on:** S5 (now BEFORE S5b — re-sequenced; upload path only, repo-URL input deferred to after S5b)
 - **Acceptance:**
   - Dashboard renders a scan's score + findings from the API.
   - Headline demo works: paste public repo URL → Risk Score.

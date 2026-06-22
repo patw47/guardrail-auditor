@@ -13,6 +13,7 @@ class ControlOut(BaseModel):
     title: str
     reference_url: str
     level: str
+    label: str  # computed display cite (single source of truth, incl. section marker)
 
 
 class FindingOut(BaseModel):

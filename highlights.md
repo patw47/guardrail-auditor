@@ -75,3 +75,15 @@ CATCH · DISCRIMINATION · GATE · DECISION · GENERALITY · MAPPING · METRIC
   REST API is a thin client of the same pure pipeline (parse→detect→score→map),
   and the public-repo-URL source (S5b) slots in behind the same protocol with no
   API change. `POST /api/scans` → 201 with a 95/F scored, control-mapped result.
+
+## S6 — MVP CLOSE
+- **METRIC** — the whole pipeline now renders end-to-end in a served dashboard:
+  upload `multi_violation.tf` → **95/100, grade F** gauge + a findings table
+  (severity badge by colour AND text, plain-language explanation, clickable
+  control links); a clean file → **0/A** empty state; malformed → error state.
+- **MAPPING** — the `§2.3 (section)` honesty marker (born from the S4
+  verifier-caught decision) survives all the way to the rendered control link,
+  single-source via the API `label` — no JS drift.
+- **GATE** — **MVP (S0–S6) closed**: scaffold → parsers → detectors (L3 pairs) →
+  Risk Score → compliance mapping → REST API + persistence → dashboard, every
+  sprint through a 2-gate loop with an independent read-only VERIFIER.

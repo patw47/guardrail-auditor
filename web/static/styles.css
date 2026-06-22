@@ -1,0 +1,47 @@
+:root { font-family: system-ui, -apple-system, sans-serif; }
+body { margin: 0; padding: 2rem; color: #1a1a1a; background: #f7f8fa; }
+header h1 { margin: 0 0 .25rem; }
+header p { margin: 0; color: #555; }
+
+.uploader { margin: 1.5rem 0; padding: 1rem; background: #fff; border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+button { padding: .5rem 1.1rem; cursor: pointer; border: 0; border-radius: 6px;
+  background: #1565c0; color: #fff; font-weight: 600; }
+.error { color: #b00020; font-weight: 600; }
+
+.score-card { display: flex; align-items: center; gap: 1.5rem; background: #fff;
+  padding: 1.25rem; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+.gauge { width: 120px; height: 120px; transform: rotate(-90deg); }
+.gauge-track { fill: none; stroke: #e6e8eb; stroke-width: 12; }
+.arc { fill: none; stroke-width: 12; stroke-linecap: round; transition: stroke-dashoffset .6s ease; }
+.score-readout #score-value { font-size: 2.5rem; font-weight: 700; }
+.score-max { color: #888; }
+.score-readout .label { margin: .15rem 0 .35rem; color: #666; }
+.counts { color: #444; margin: 0; }
+
+.grade { display: inline-block; margin-left: .75rem; padding: .1rem .6rem;
+  border-radius: 6px; color: #fff; font-weight: 700; }
+
+/* Grade + severity colours (paired with TEXT labels, never colour alone) */
+.grade-A, .arc.grade-A { stroke: #1b9e3e; background: #1b9e3e; }
+.grade-B, .arc.grade-B { stroke: #7cb342; background: #7cb342; }
+.grade-C, .arc.grade-C { stroke: #f9a825; background: #f9a825; }
+.grade-D, .arc.grade-D { stroke: #ef6c00; background: #ef6c00; }
+.grade-F, .arc.grade-F { stroke: #c62828; background: #c62828; }
+
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; background: #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+th, td { text-align: left; padding: .55rem .6rem; border-bottom: 1px solid #eee;
+  vertical-align: top; font-size: .9rem; }
+th { background: #f0f2f5; }
+td a { display: inline-block; margin-right: .35rem; color: #1565c0; }
+
+.badge { display: inline-block; padding: .1rem .5rem; border-radius: 4px;
+  color: #fff; font-weight: 700; font-size: .72rem; letter-spacing: .02em; }
+.badge.sev-critical { background: #c62828; }
+.badge.sev-high { background: #ef6c00; }
+.badge.sev-medium { background: #f9a825; color: #1a1a1a; }
+.badge.sev-low { background: #9e9e9e; }
+
+.empty { padding: 1rem; background: #e8f5e9; border-radius: 8px; color: #1b5e20;
+  font-weight: 600; }
