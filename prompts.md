@@ -1219,3 +1219,21 @@ Architect prompts logged **verbatim**, every turn (SCRIBE duty).
 > scoring/compliance/parsing diff empty, tables.py untouched, only core/db.py +
 > test + README touched, 88 tests green. Approved - commit this single fix on its
 > own with your subject and push.
+
+---
+
+## Prompt #41 — T0 (2026-06-22) — Submission polish: correct stale deck counts (docs only)
+
+> [SUBMISSION POLISH — package finalization, docs-only, no code]
+> The build is complete (S0–S8 + the post-S8 schema fix) and verified on a fresh
+> clone. This is the final package pass before submission. Scope is DOCS ONLY: no
+> change to any detector, pipeline, scoring, compliance, parsing, schema, or test
+> logic — touch only the deck, the README if needed, and new package docs.
+> 1. Deck — correct two stale counts against the real repo, do NOT assert them:
+>    - Run pytest -q and read the real passing count; slide 9 says "85 tests
+>      green" — replace with whatever pytest reports now.
+>    - Slide 6 says "37 logged prompts"; AFTER this prompt is logged, run
+>      `grep -c '^## Prompt #' prompts.md` and use that real number, keeping the
+>      honest framing (#0 mandated opener; one flagged duplicate at #17).
+>    - Then grep deck for any other stale 85/37 and reconcile, or report none.
+>      Then STOP — hold the commit until I approve.

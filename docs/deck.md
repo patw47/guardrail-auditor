@@ -106,7 +106,7 @@ audit, each a real artifact:
 - **The tool audits the configs** — detectors → findings → Risk Score.
 - **The matrix audits the tool** — 12/12 discrimination, true-positive fires /
   near-miss silent, sourced from CI.
-- **`prompts.md` audits the human** — **37 logged prompts** (#0 is the mandated
+- **`prompts.md` audits the human** — **42 logged prompts** (#0 is the mandated
   Lead-Architect opener; one flagged duplicate at #17), every architect gate on
   the record.
 
@@ -171,7 +171,7 @@ itself, on the record in `LIMITATIONS.md`:
 **Roadmap:** more detectors + allowlist hosts · the S3 block-public-access check ·
 fenced LLM narration — *never in the trust path*.
 
-**Build at a glance:** 4 detectors · 12/12 matrix · K→K 3/3 · **85 tests green** ·
+**Build at a glance:** 4 detectors · 12/12 matrix · K→K 3/3 · **88 tests green** ·
 S0–S8 + P1/P3 specs · `github.com/patw47/guardrail-auditor`.
 
 *Source: `LIMITATIONS.md`, `decisions.md`, `coverage_matrix.md`.*
