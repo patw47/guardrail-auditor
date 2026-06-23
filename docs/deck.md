@@ -106,7 +106,7 @@ audit, each a real artifact:
 - **The tool audits the configs** — detectors → findings → Risk Score.
 - **The matrix audits the tool** — 12/12 discrimination, true-positive fires /
   near-miss silent, sourced from CI.
-- **`prompts.md` audits the human** — **42 logged prompts** (#0 is the mandated
+- **`prompts.md` audits the human** — **43 logged prompts** (#0 is the mandated
   Lead-Architect opener; one flagged duplicate at #17), every architect gate on
   the record.
 

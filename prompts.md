@@ -1237,3 +1237,37 @@ Architect prompts logged **verbatim**, every turn (SCRIBE duty).
 >      honest framing (#0 mandated opener; one flagged duplicate at #17).
 >    - Then grep deck for any other stale 85/37 and reconcile, or report none.
 >      Then STOP — hold the commit until I approve.
+
+---
+
+## Prompt #42 — T0 (2026-06-22) — Final SUBMISSION sprint: create SUBMISSION.md (docs only)
+
+> [GATE 2(b) — counts-fix APPROVED; dashboard.png ruling; then final SUBMISSION sprint]
+> Counts-fix approved (slide 6 = 42 logged prompts, slide 9 = 88 tests green).
+> Commit it ("docs: correct deck counts (42 prompts, 88 tests) for submission"),
+> push. dashboard.png: commit SEPARATELY ("docs: replace dashboard screenshot for
+> final package"), push.
+> Then create SUBMISSION.md at repo root: the single index an evaluator opens to
+> confirm the package is complete. DOCS ONLY — zero change under rules/ core/
+> models/ api/ tests/. Map each of the five official checklist lines to real,
+> in-repo evidence, [x] only when evidence exists on disk:
+>  1. Tagle.ai "Tag" output summary — Tag verbatim "Navigator · Foundation
+>     Operator with a Pioneer edge, High skills"; one honest fit line (calibrated
+>     verification before trusting output — aligned with the deterministic
+>     trust-path principle); embed docs/screenshots/tag.png +
+>     docs/screenshots/output-summary.png; link
+>     ./docs/Tagle_Personal_Growth_Profile_Wintrebert.pdf. GUARD: confirm all
+>     three exist before linking; if any missing, STOP and report, don't fake.
+>  2. Public GitHub repo — https://github.com/patw47/guardrail-auditor
+>  3. prompts.md — ./prompts.md
+>  4. AI-generated deck (Markdown) — ./docs/deck.md
+>  5. Cloud decommissioned/accounts closed — static tool, NO cloud, NO API key →
+>     nothing provisioned, nothing to decommission/close; mark [x] with that.
+> Then a "Try it" section: two inputs (upload bundled fixtures / paste a public
+> repo URL) with testable https github.com repos: bridgecrewio/terragoat (cite
+> the proven 3 findings, 80/F from README); patw47/acme-infra (list as testable,
+> do NOT assert an unreproduced score); bundled multi_violation.tf → 95/F.
+> Done-when: ls -la the three Tag assets present (or guard fired); SUBMISSION.md
+> exists, 5 lines resolved+marked at real evidence; after THIS prompt is logged,
+> grep -c '^## Prompt #' prompts.md and update deck slide 6 to that real count;
+> grep deck for stale 85/37/42 → none; L1 green; git diff --stat only docs. STOP.
