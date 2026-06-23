@@ -1271,3 +1271,20 @@ Architect prompts logged **verbatim**, every turn (SCRIBE duty).
 > exists, 5 lines resolved+marked at real evidence; after THIS prompt is logged,
 > grep -c '^## Prompt #' prompts.md and update deck slide 6 to that real count;
 > grep deck for stale 85/37/42 → none; L1 green; git diff --stat only docs. STOP.
+
+---
+
+## Prompt #43 — T0 (2026-06-22) — README: add second testable repo (acme-infra), docs only
+
+> [README testable repos — docs-only, no code]
+> Same docs-only scope. Add a SECOND testable public repo to the Quickstart
+> "Paste a public repo URL" area, alongside terragoat:
+>  - https://github.com/patw47/acme-infra → 3 findings, 80/F (OPEN_SSH in
+>    network.tf; PUBLIC_DB and UNENCRYPTED_STORAGE in rds.tf; 11 files scanned).
+>    REAL — verified by an actual https clone through the SSRF guard, same path as
+>    the API. Use as-is; do not round or re-estimate.
+>  - Keep the terragoat line (3 findings, 80/F) unchanged.
+>  - Frame the two: upload bundled fixtures for an offline demo, or paste either
+>    public repo to prove the end-to-end clone→scan path on real infra code.
+> Done-when: README shows both repos with proven figures; L1 green (88);
+> git diff --stat only README.md. STOP, hold commit.

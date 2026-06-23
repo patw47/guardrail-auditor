@@ -30,8 +30,14 @@ Open <http://127.0.0.1:8000/> and either:
 
 - **Upload** the bundled vulnerable fixtures `tests/fixtures/detectors/*.tf`
   (e.g. `multi_violation.tf` → **95/100, grade F**), or
-- **Paste a public repo URL** — `https://github.com/bridgecrewio/terragoat`
-  → **3 findings, 80/F** (real clone, proven end-to-end).
+- **Paste a public repo URL** (https, `github.com` — allowlisted by the SSRF
+  guard) — the end-to-end clone→scan path on real infrastructure code:
+  - `https://github.com/bridgecrewio/terragoat` → **3 findings, 80/F**.
+  - `https://github.com/patw47/acme-infra` → **3 findings, 80/F** — OPEN_SSH in
+    `network.tf`, PUBLIC_DB + UNENCRYPTED_STORAGE in `rds.tf`, 11 files scanned.
+
+Upload the bundled fixtures for a fully offline demo, or paste either public repo
+to prove the clone→scan path on real infrastructure code.
 
 Run the test suite and the L1 gate:
 
